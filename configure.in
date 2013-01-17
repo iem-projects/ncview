@@ -1,0 +1,329 @@
+dnl Process this file with autoconf to produce a configure script.
+
+dnl set version
+m4_define([ncview_major_version],[2])
+m4_define([ncview_minor_version],[0])
+m4_define([ncview_micro_version],[0])
+m4_define([ncview_version],[ncview_major_version.ncview_minor_version.ncview_micro_version])
+m4_define([ncview_release_date],[15 Feb 2010])
+
+AC_INIT([ncview],[ncview_version],[dpierce@ucsd.edu])
+
+# Handle netcdf
+AC_PATH_NETCDF
+
+# For ncview-2.0, I've chosen to REQUIRE the netcdf V4 interface.
+if test $NETCDF_V4 = "no"; then
+	echo "-------------------------------------------------------------------"
+	echo "ncview version 2.0 REQUIRES the netcdf library be version 4 or above,"
+	echo "AND installed with HDF-5 support (i.e., the netcdf library must be"
+	echo "compiled with the --enable-netcdf-4 flag). If you don't want to install"
+	echo "the full version of netcdf-4 with HDF-5 support, then please install"
+	echo "ncview version 1.93g instead."
+	echo "-------------------------------------------------------------------"
+	exit -1
+fi
+
+#------------------------------------------------------------------------
+# Check for C compiler. NOTE that this must come AFTER the netcdf check. 
+# The netcdf library could have been compiled with, for example, Intel C;
+# we have to specifically check if the same compiler used to compile the
+# netcdf library exists.
+#------------------------------------------------------------------------
+AC_PROG_CC( $NETCDF_CC )
+AC_ISC_POSIX
+AC_HEADER_STDC
+
+
+AC_CONFIG_HEADER(config.h)
+AM_INIT_AUTOMAKE([ncview],[ncview_version])
+
+AC_PATH_X
+if test "x$no_x" == "xyes"; then
+	echo "------------------------------------------------------------------------------------"
+	echo "Error, the X libraries and development headers must be installed for ncview to work!"
+	echo "------------------------------------------------------------------------------------"
+	echo "More information: You are trying to compile ncview. The machine you are compiling on"
+	echo "probably already has the X windows *runtime* libraries installed, but to *compile*"
+	echo "a program you need more than just the runtime libraries.  You need what are usually"
+	echo "called the 'development headers', named because they are used when developing or"
+	echo "compiling X windows programs.  The best advice I can give you is to use your package"
+	echo "manager to look for a package whose name is something along the lines of x11-devel,"
+	echo "or xorg-x11-proto-devel, or something along those lines that indicates the package"
+	echo "contains the X windows development headers.  Install that package first, then try to"
+	echo "remake ncview.  "
+	echo "Note: If that still fails, even after you've installed the X windows *development*"
+	echo "headers, then you may be on a machine where the automatic configuration system is not"
+	echo "set up quite as it probably should be.  In that case, you might have to specify the"
+	echo "location of the X libraries and X headers manually.  For example, on some machines"
+	echo "the following will work:"
+	echo "   ./configure  --x-libraries=/usr/lib64 --x-includes=/usr/include/X11"
+	echo "                              ^^^^^^^^^^              ^^^^^^^^^^^^^^^^ these are what"
+	echo "you want to set to reflect the location of files such as libX11.so and X.h on your"
+	echo "particular system."
+	exit -1
+fi
+AC_PATH_XTRA
+
+#looking for Athena widgets
+#
+# This snippet of code is Copyright (c) 2009 Magnus Hagdorn <Magnus.Hagdorn@ed.ac.uk>
+# released under GPL-3; extended by David Pierce to check Xaw3d if Xaw fails, apparently
+# Fedoras ship with Xaw3d but not Xaw
+#
+haveAthena=yes
+LIBSsave=$LIBS
+CFLAGSsave=$CFLAGS
+CFLAGS=$X_CFLAGS
+LIBS=$X_LIBS
+AC_MSG_CHECKING([for the Athena widgets])
+AC_MSG_RESULT()
+AC_CHECK_LIB(Xt,XtWindow,[],[haveAthena=no])
+AC_CHECK_LIB(Xaw, XawScrollbarSetThumb,[],[haveAthena=no])
+if test x"$haveAthena"x = "xnox"; then
+	haveAthena=yes
+	AC_MSG_CHECKING([for the Athena 3d widgets instead])
+	AC_CHECK_LIB(Xaw3d, XawScrollbarSetThumb,[],[haveAthena=no])
+fi
+AC_CHECK_HEADER([X11/Intrinsic.h],[],[haveAthena=no])
+AC_CHECK_HEADER([X11/Xaw/Simple.h],[],[haveAthena=no])
+if test x"$haveAthena"x != "xyesx"; then
+  # On AIX this fails because the Xmu header needs to be there as well...
+  AC_CHECK_HEADER([X11/Xaw/Simple.h],[],[haveAthena=no],[[
+#include<X11/Xmu/Xmu.h>
+]])
+  if test x"$haveAthena"x != "xyesx"; then
+    AC_MSG_ERROR([Could not find Athena widgets library and header (checked w/Xmu.h included as well).  Use your package manager to install the X windows development libraries and headers.])
+  fi
+fi
+XAW_LIBS=$LIBS
+echo "X Athena widget (Xaw) libraries: $XAW_LIBS"
+AC_SUBST(XAW_LIBS)
+LIBS=$LIBSsave
+CFLAGS=$CFLAGSsave
+
+#------------------------------------------------------------------------------
+# Check for X11 library. It's not clear to me why this is necessary, yet Darwin 
+# requires a separate check
+#------------------------------------------------------------------------------
+haveX11=yes
+LIBSsave=$LIBS
+CFLAGSsave=$CFLAGS
+CFLAGS=$X_CFLAGS
+LIBS=$X_LIBS
+AC_MSG_CHECKING([for X11 library])
+AC_MSG_RESULT()
+AC_CHECK_LIB(X11,XPutImage,[],[haveX11=no])
+if test x"$haveX11"x != "xyesx"; then
+  AC_MSG_ERROR([Could not find X11 library.  Use your package manager to install the X windows development libraries and headers.])
+fi
+X11_LIBS=$LIBS
+echo "X11 libraries: $X11_LIBS"
+AC_SUBST(X11_LIBS)
+LIBS=$LIBSsave
+CFLAGS=$CFLAGSsave
+
+# Handle udunits2
+AC_PATH_UDUNITS2
+do_udunits2=false
+if test x$UDUNITS2_INCDIR != x; then
+	if test x$UDUNITS2_LIBDIR != x; then
+		do_udunits2=true
+	fi
+fi
+if test $do_udunits2 = true; then
+	echo "****************************************************************************"
+	echo "Udunits library version 2 support enabled.   "
+	echo "udunits2 dirs: include: $UDUNITS2_INCDIR  library: $UDUNITS2_LIBDIR  libname: $UDUNITS2_LIBNAME"
+	echo "****************************************************************************"
+	DO_UDUNITS2_LINE="INC_UDUNITS2   = -DINC_UDUNITS2"
+	DO_UDUNITS2_INCDIR="UDUNITS2INCDIR = -I$UDUNITS2_INCDIR"
+	DO_UDUNITS2_LIBDIR="UDUNITS2LIBDIR = -L$UDUNITS2_LIBDIR"
+	DO_UDUNITS2_LIBNAME="UDUNITS2LIB = -l$UDUNITS2_LIBNAME"
+else
+	echo "************************************************************************"
+	echo "Note: udunits2 support is NOT enabled, because I could not find the "
+	echo "location of the udunits2 include file 'udunits2.h' or library file"
+	echo "'libudunits2.a'.  Ncview uses the udunits2 package to format date strings"
+	echo "with units of the form 'days since 1900-01-01'.  If you do not use"
+	echo "these udunits2-standard date formats, then don't worry about the lack"
+	echo "of udunits2 support.  If you DO use udunits2 format date strings, and"
+	echo "you want the udunits2 support, then you must tell me where to find"
+	echo "the udunits2 package by giving arguments to configure, as follows:"
+	echo "  ./configure -with-udunits2_incdir=include_directory -with-udunits2_libdir=library_directory"
+	echo "************************************************************************"
+	DO_UDUNITS2_LINE="#INC_UDUNITS2   = -DINC_UDUNITS2"
+	DO_UDUNITS2_INCDIR="#UDUNITS2INCDIR = -I$UDUNITS2_INCDIR"
+	DO_UDUNITS2_LIBDIR="#UDUNITS2LIBDIR = -I$UDUNITS2_LIBDIR"
+	DO_UDUNITS2_LIBNAME="#UDUNITS2LIB = -l$UDUNITS2_LIBNAME"
+fi
+AC_SUBST(DO_UDUNITS2_LINE)
+AC_SUBST(DO_UDUNITS2_INCDIR)
+AC_SUBST(DO_UDUNITS2_LIBDIR)
+AC_SUBST(DO_UDUNITS2_LIBNAME)
+
+# Handle png
+AC_PATH_PNG
+do_png=false
+if test x$PNG_INCDIR != x; then
+	if test x$PNG_LIBDIR != x; then
+		do_png=true
+	fi
+fi
+if test $do_png = true; then
+	DO_PNG_LINE="INC_PNG   = -DINC_PNG"
+	DO_PNG_INCDIR="PNGINCDIR = -I$PNG_INCDIR"
+	DO_PNG_LIBDIR="PNGLIBDIR = -L$PNG_LIBDIR"
+	DO_PNG_LIBNAME="PNGLIB = -l$PNG_LIBNAME"
+else
+	echo "************************************************************************"
+	echo "Note: the -frames option is NOT enabled, because I could not find the "
+	echo "location of the PNG include file 'png.h' or library file"
+	echo "'libpng.so'.  Ncview uses the png package to dump out the frames viewed,"
+	echo "which is an easy way to make an mpeg video of the data if you want."
+	echo "If you do not want this feature, then don't worry about the lack"
+	echo "of png support.  If you DO want this, then you must install libpng, or tell "
+	echo "me where to find the png package by giving arguments to configure, as follows:"
+	echo "  ./configure -with-png_incdir=include_directory -with-png_libdir=library_directory"
+	echo "************************************************************************"
+	DO_PNG_LINE="#INC_PNG   = -DINC_PNG"
+	DO_PNG_INCDIR="#PNGINCDIR = -I$PNG_INCDIR"
+	DO_PNG_LIBDIR="#PNGLIBDIR = -I$PNG_LIBDIR"
+	DO_PNG_LIBNAME="#PNGLIB = -l$PNG_LIBNAME"
+fi
+AC_SUBST(DO_PNG_LINE)
+AC_SUBST(DO_PNG_INCDIR)
+AC_SUBST(DO_PNG_LIBDIR)
+AC_SUBST(DO_PNG_LIBNAME)
+PREFIX=${prefix}
+
+AC_PROG_INSTALL
+
+AC_SUBST(PREFIX)
+AC_SUBST(CFLAGS)
+AC_SUBST(CPPFLAGS)
+AC_SUBST(LDFLAGS)
+AC_SUBST(X_INCLUDES)
+
+
+#----------------------------------------------------------------------------
+# We want to test if the same compiler was used for the netcdf library as for
+# ncview.  This might be complicated by the fact that often "gcc" and "cc"
+# end up invoking the same compiler.  Use an ugly hack that I have no idea
+# if it generally works or not.  Probably not.
+#----------------------------------------------------------------------------
+CC_TEST_SAME=$CC
+#-----------------------------------------------------------------------
+# Point of following obscure manipulations is that $CC can have multiple
+# words, for example, it could be "gcc -fPIC -lm". We want to keep only
+# the first word, so use 'set' and then take the first arg ($1).
+#-----------------------------------------------------------------------
+set $CC_TEST_SAME
+CC_TEST_SAME=$1
+if test x$CC_TEST_SAME = xcc; then
+	CC_TEST_SAME=gcc			
+fi
+NETCDF_CC_TEST_SAME=$NETCDF_CC
+set $NETCDF_CC_TEST_SAME
+NETCDF_CC_TEST_SAME=$1
+if test x$NETCDF_CC_TEST_SAME = xcc; then
+	NETCDF_CC_TEST_SAME=gcc
+fi
+if test x$CC_TEST_SAME != x$NETCDF_CC_TEST_SAME; then
+	echo "======================================================================"
+	echo "Configuration error: You specified that the \"$CC\" C compiler should be"
+	echo "used to build ncview, but the netcdf library was compiled with the \"$NETCDF_CC\""
+	echo "compiler.  Here is the path where I found the netcdf library:"
+	echo "     $NETCDF_LDFLAGS"
+	echo "You must use the same compiler for ncview as was used to build the netcdf library!"
+	echo " "
+	echo "There are two possible ways to fix this."
+	echo " "
+	echo "1) Download the netcdf library and compile it with the $CC compiler,"
+	echo "install it, and try again to build ncview.  NOTE that if you do this,"
+	echo "you might have more than one version of the netcdf library on your system,"
+	echo "built with differnt compilers, which can get confusing.  If you do this,"
+	echo "you will have to specify the path to the (new) version of nc-config"
+	echo "that was compiled using the $CC compiler by configuring ncview in a "
+	echo "way similar to this:"
+	echo " "
+	echo "   ./configure --with-nc-config=/path/to/newly/compiled/nc-config"
+	echo " "
+	echo "2) Configure ncview to use the $NETCDF_CC compiler."
+	echo "To do this, set environmental variable CC to $NETCDF_CC"
+	echo "and run ./configure again"
+	echo "==================================================================="
+	exit -1
+fi
+
+#----------------------------------------------------------------------------------
+# Construct our RPATH flags.  Idea here is that we have LDFLAGS that might look,
+# for example, something like this:
+#	LIBS="-L/usr/local/lib -lnetcdf -L/home/pierce/lib -ludunits"
+# We want to convert this to -rpath flags suitable for the compiler, which would
+# have this format:
+#	"-Wl,-rpath,/usr/local/lib -Wl,-rpath,/home/pierce/lib"
+#
+# As a safety check, I only do this for the GNU compiler, as I don't know if this
+# is anything like correct syntax for other compilers.  Note that this *does* work
+# for the Intel icc compiler, but also that the icc compiler sets $ac_compiler_gnu
+# to "yes".  Go figure.
+#----------------------------------------------------------------------------------
+if test x$ac_compiler_gnu = xyes; then
+	RPATH_FLAGS=""
+	for word in $UDUNITS2_LDFLAGS $NETCDF_LDFLAGS; do
+		if test `expr $word : -L/` -eq 3; then
+			RPDIR=`expr substr $word 3 999`;
+			RPATH_FLAGS="$RPATH_FLAGS -Wl,-rpath,$RPDIR"
+		fi
+	done
+	AC_SUBST(RPATH_FLAGS)
+fi
+
+
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_OUTPUT
+
+
+echo " "
+echo "----------- Configure Summary ----------"
+echo "Compiler:"
+echo "        CC                 = $CC"
+echo "        Runtime path flags = $RPATH_FLAGS"
+echo " "
+echo "UDUNITS:"
+if test $do_udunits2 = true; then
+echo "        UDUNITS2_LIBS     = $UDUNITS2_LIBS"
+echo "        UDUNITS2_CPPFLAGS = $UDUNITS2_CPPFLAGS"
+echo "        UDUNITS2_LDFLAGS  = $UDUNITS2_LDFLAGS"
+echo " "
+else
+echo "        not found. Specify --with-udunits2_incdir=... and --with-udunits2_libdir=... flags to enable"
+fi
+
+echo " "
+echo "NETCDF:"
+echo "        VERSION          = $NETCDF_VERSION"
+echo "        COMPILER USED    = $NETCDF_CC"
+echo "        NETCDF_CPPFLAGS  = $NETCDF_CPPFLAGS"
+echo "        NETCDF_LDFLAGS   = $NETCDF_LDFLAGS"
+echo "        NETCDF_V4        = $NETCDF_V4"
+echo " "
+echo "X:"
+echo "        X_CFLAGS         = $X_CFLAGS"
+echo "        X11_LIBS         = $X11_LIBS"
+echo "        XAW_LIBS         = $XAW_LIBS"
+echo "        X_PRE_LIBS       = $X_PRE_LIBS"
+echo "        X_LIBS           = $X_LIBS"
+echo "        X_EXTRA_LIBS     = $X_EXTRA_LIBS"
+echo " "
+echo "PNG:"
+if test $do_png = true; then
+echo "        PNG_LIBS         = $PNG_LIBS"
+echo "        PNG_CPPFLAGS     = $PNG_CPPFLAGS"
+echo "        PNG_LDFLAGS      = $PNG_LDFLAGS"
+echo " "
+else
+echo "        not found. Install libpng, or specify --with-png_incdir=... and --with-png_libdir=... flags to enable"
+fi
+

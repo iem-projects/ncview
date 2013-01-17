@@ -1,0 +1,26 @@
+Solaris machines seem to have everything in weird
+places, if you are used to any other kind of Unix.
+The distribution includes two files, "Makefile.solaris", 
+and "Makefile.solaris.old".  The first was provided
+curtesy of R. Zagar of the College of Marine Studies,
+University of Delaware, and the second was one that
+I hacked up some time ago when I had access to a
+Solaris machine.  Try the "Makefile.solaris" first.
+
+If you have a Solaris machine and you want to make
+ncview, do the following:
+
+type "cp Makefile.solaris Makefile"  (or "cp Makefile.solaris.old Makefile")
+type "make"
+type "make install"
+
+I found on the machine I had access to, to run 
+ncview, I have to set the following environmental
+variable:
+
+ setenv LD_LIBRARY_PATH /usr/openwin/lib
+
+Otherwise, I got an error like this:
+
+ld.so.1: ncview: fatal: libXaw.so.5: can't open file: errno=2
+

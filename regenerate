@@ -1,0 +1,14 @@
+#!/bin/sh
+
+rm aclocal.m4 
+rm config.log
+rm config.status
+rm -r  autom4te.cache/
+rm Makefile
+
+aclocal -I m4macros
+autoheader 
+automake
+autoconf
+
+echo "next, run ./configure"

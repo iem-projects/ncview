@@ -1,0 +1,4 @@
+##./configure --prefix=$HOME --with-udunits2_incdir=/home/pierce/src/packages/data/udunits/udunits-2.1.23/install/include --with-udunits2_libdir=/home/pierce/src/packages/data/udunits/udunits-2.1.23/install/lib
+
+./configure --prefix=$HOME --with-udunits2_incdir=/home/pierce/src/packages/data/udunits/udunits-2.1.11/install/include --with-udunits2_libdir=/home/pierce/src/packages/data/udunits/udunits-2.1.11/install/lib
+

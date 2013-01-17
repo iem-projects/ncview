@@ -1,0 +1,1043 @@
+m4trace:/usr/share/aclocal-1.10/amversion.m4:14: -1- AC_DEFUN([AM_AUTOMAKE_VERSION], [am__api_version='1.10'
+dnl Some users find AM_AUTOMAKE_VERSION and mistake it for a way to
+dnl require some minimum version.  Point them to the right macro.
+m4_if([$1], [1.10.1], [],
+      [AC_FATAL([Do not call $0, use AM_INIT_AUTOMAKE([$1]).])])dnl
+])
+m4trace:/usr/share/aclocal-1.10/amversion.m4:33: -1- AC_DEFUN([AM_SET_CURRENT_AUTOMAKE_VERSION], [AM_AUTOMAKE_VERSION([1.10.1])dnl
+m4_ifndef([AC_AUTOCONF_VERSION],
+  [m4_copy([m4_PACKAGE_VERSION], [AC_AUTOCONF_VERSION])])dnl
+_AM_AUTOCONF_VERSION(AC_AUTOCONF_VERSION)])
+m4trace:/usr/share/aclocal-1.10/auxdir.m4:47: -1- AC_DEFUN([AM_AUX_DIR_EXPAND], [dnl Rely on autoconf to set up CDPATH properly.
+AC_PREREQ([2.50])dnl
+# expand $ac_aux_dir to an absolute path
+am_aux_dir=`cd $ac_aux_dir && pwd`
+])
+m4trace:/usr/share/aclocal-1.10/cond.m4:15: -1- AC_DEFUN([AM_CONDITIONAL], [AC_PREREQ(2.52)dnl
+ ifelse([$1], [TRUE],  [AC_FATAL([$0: invalid condition: $1])],
+	[$1], [FALSE], [AC_FATAL([$0: invalid condition: $1])])dnl
+AC_SUBST([$1_TRUE])dnl
+AC_SUBST([$1_FALSE])dnl
+_AM_SUBST_NOTMAKE([$1_TRUE])dnl
+_AM_SUBST_NOTMAKE([$1_FALSE])dnl
+if $2; then
+  $1_TRUE=
+  $1_FALSE='#'
+else
+  $1_TRUE='#'
+  $1_FALSE=
+fi
+AC_CONFIG_COMMANDS_PRE(
+[if test -z "${$1_TRUE}" && test -z "${$1_FALSE}"; then
+  AC_MSG_ERROR([[conditional "$1" was never defined.
+Usually this means the macro was only invoked conditionally.]])
+fi])])
+m4trace:/usr/share/aclocal-1.10/depend.m4:28: -1- AC_DEFUN([_AM_DEPENDENCIES], [AC_REQUIRE([AM_SET_DEPDIR])dnl
+AC_REQUIRE([AM_OUTPUT_DEPENDENCY_COMMANDS])dnl
+AC_REQUIRE([AM_MAKE_INCLUDE])dnl
+AC_REQUIRE([AM_DEP_TRACK])dnl
+
+ifelse([$1], CC,   [depcc="$CC"   am_compiler_list=],
+       [$1], CXX,  [depcc="$CXX"  am_compiler_list=],
+       [$1], OBJC, [depcc="$OBJC" am_compiler_list='gcc3 gcc'],
+       [$1], UPC,  [depcc="$UPC"  am_compiler_list=],
+       [$1], GCJ,  [depcc="$GCJ"  am_compiler_list='gcc3 gcc'],
+                   [depcc="$$1"   am_compiler_list=])
+
+AC_CACHE_CHECK([dependency style of $depcc],
+               [am_cv_$1_dependencies_compiler_type],
+[if test -z "$AMDEP_TRUE" && test -f "$am_depcomp"; then
+  # We make a subdir and do the tests there.  Otherwise we can end up
+  # making bogus files that we don't know about and never remove.  For
+  # instance it was reported that on HP-UX the gcc test will end up
+  # making a dummy file named `D' -- because `-MD' means `put the output
+  # in D'.
+  mkdir conftest.dir
+  # Copy depcomp to subdir because otherwise we won't find it if we're
+  # using a relative directory.
+  cp "$am_depcomp" conftest.dir
+  cd conftest.dir
+  # We will build objects and dependencies in a subdirectory because
+  # it helps to detect inapplicable dependency modes.  For instance
+  # both Tru64's cc and ICC support -MD to output dependencies as a
+  # side effect of compilation, but ICC will put the dependencies in
+  # the current directory while Tru64 will put them in the object
+  # directory.
+  mkdir sub
+
+  am_cv_$1_dependencies_compiler_type=none
+  if test "$am_compiler_list" = ""; then
+     am_compiler_list=`sed -n ['s/^#*\([a-zA-Z0-9]*\))$/\1/p'] < ./depcomp`
+  fi
+  for depmode in $am_compiler_list; do
+    # Setup a source with many dependencies, because some compilers
+    # like to wrap large dependency lists on column 80 (with \), and
+    # we should not choose a depcomp mode which is confused by this.
+    #
+    # We need to recreate these files for each test, as the compiler may
+    # overwrite some of them when testing with obscure command lines.
+    # This happens at least with the AIX C compiler.
+    : > sub/conftest.c
+    for i in 1 2 3 4 5 6; do
+      echo '#include "conftst'$i'.h"' >> sub/conftest.c
+      # Using `: > sub/conftst$i.h' creates only sub/conftst1.h with
+      # Solaris 8's {/usr,}/bin/sh.
+      touch sub/conftst$i.h
+    done
+    echo "${am__include} ${am__quote}sub/conftest.Po${am__quote}" > confmf
+
+    case $depmode in
+    nosideeffect)
+      # after this tag, mechanisms are not by side-effect, so they'll
+      # only be used when explicitly requested
+      if test "x$enable_dependency_tracking" = xyes; then
+	continue
+      else
+	break
+      fi
+      ;;
+    none) break ;;
+    esac
+    # We check with `-c' and `-o' for the sake of the "dashmstdout"
+    # mode.  It turns out that the SunPro C++ compiler does not properly
+    # handle `-M -o', and we need to detect this.
+    if depmode=$depmode \
+       source=sub/conftest.c object=sub/conftest.${OBJEXT-o} \
+       depfile=sub/conftest.Po tmpdepfile=sub/conftest.TPo \
+       $SHELL ./depcomp $depcc -c -o sub/conftest.${OBJEXT-o} sub/conftest.c \
+         >/dev/null 2>conftest.err &&
+       grep sub/conftst1.h sub/conftest.Po > /dev/null 2>&1 &&
+       grep sub/conftst6.h sub/conftest.Po > /dev/null 2>&1 &&
+       grep sub/conftest.${OBJEXT-o} sub/conftest.Po > /dev/null 2>&1 &&
+       ${MAKE-make} -s -f confmf > /dev/null 2>&1; then
+      # icc doesn't choke on unknown options, it will just issue warnings
+      # or remarks (even with -Werror).  So we grep stderr for any message
+      # that says an option was ignored or not supported.
+      # When given -MP, icc 7.0 and 7.1 complain thusly:
+      #   icc: Command line warning: ignoring option '-M'; no argument required
+      # The diagnosis changed in icc 8.0:
+      #   icc: Command line remark: option '-MP' not supported
+      if (grep 'ignoring option' conftest.err ||
+          grep 'not supported' conftest.err) >/dev/null 2>&1; then :; else
+        am_cv_$1_dependencies_compiler_type=$depmode
+        break
+      fi
+    fi
+  done
+
+  cd ..
+  rm -rf conftest.dir
+else
+  am_cv_$1_dependencies_compiler_type=none
+fi
+])
+AC_SUBST([$1DEPMODE], [depmode=$am_cv_$1_dependencies_compiler_type])
+AM_CONDITIONAL([am__fastdep$1], [
+  test "x$enable_dependency_tracking" != xno \
+  && test "$am_cv_$1_dependencies_compiler_type" = gcc3])
+])
+m4trace:/usr/share/aclocal-1.10/depend.m4:139: -1- AC_DEFUN([AM_SET_DEPDIR], [AC_REQUIRE([AM_SET_LEADING_DOT])dnl
+AC_SUBST([DEPDIR], ["${am__leading_dot}deps"])dnl
+])
+m4trace:/usr/share/aclocal-1.10/depend.m4:147: -1- AC_DEFUN([AM_DEP_TRACK], [AC_ARG_ENABLE(dependency-tracking,
+[  --disable-dependency-tracking  speeds up one-time build
+  --enable-dependency-tracking   do not reject slow dependency extractors])
+if test "x$enable_dependency_tracking" != xno; then
+  am_depcomp="$ac_aux_dir/depcomp"
+  AMDEPBACKSLASH='\'
+fi
+AM_CONDITIONAL([AMDEP], [test "x$enable_dependency_tracking" != xno])
+AC_SUBST([AMDEPBACKSLASH])dnl
+_AM_SUBST_NOTMAKE([AMDEPBACKSLASH])dnl
+])
+m4trace:/usr/share/aclocal-1.10/depout.m4:14: -1- AC_DEFUN([_AM_OUTPUT_DEPENDENCY_COMMANDS], [for mf in $CONFIG_FILES; do
+  # Strip MF so we end up with the name of the file.
+  mf=`echo "$mf" | sed -e 's/:.*$//'`
+  # Check whether this is an Automake generated Makefile or not.
+  # We used to match only the files named `Makefile.in', but
+  # some people rename them; so instead we look at the file content.
+  # Grep'ing the first line is not enough: some people post-process
+  # each Makefile.in and add a new line on top of each file to say so.
+  # Grep'ing the whole file is not good either: AIX grep has a line
+  # limit of 2048, but all sed's we know have understand at least 4000.
+  if sed -n 's,^#.*generated by automake.*,X,p' "$mf" | grep X >/dev/null 2>&1; then
+    dirpart=`AS_DIRNAME("$mf")`
+  else
+    continue
+  fi
+  # Extract the definition of DEPDIR, am__include, and am__quote
+  # from the Makefile without running `make'.
+  DEPDIR=`sed -n 's/^DEPDIR = //p' < "$mf"`
+  test -z "$DEPDIR" && continue
+  am__include=`sed -n 's/^am__include = //p' < "$mf"`
+  test -z "am__include" && continue
+  am__quote=`sed -n 's/^am__quote = //p' < "$mf"`
+  # When using ansi2knr, U may be empty or an underscore; expand it
+  U=`sed -n 's/^U = //p' < "$mf"`
+  # Find all dependency output files, they are included files with
+  # $(DEPDIR) in their names.  We invoke sed twice because it is the
+  # simplest approach to changing $(DEPDIR) to its actual value in the
+  # expansion.
+  for file in `sed -n "
+    s/^$am__include $am__quote\(.*(DEPDIR).*\)$am__quote"'$/\1/p' <"$mf" | \
+       sed -e 's/\$(DEPDIR)/'"$DEPDIR"'/g' -e 's/\$U/'"$U"'/g'`; do
+    # Make sure the directory exists.
+    test -f "$dirpart/$file" && continue
+    fdir=`AS_DIRNAME(["$file"])`
+    AS_MKDIR_P([$dirpart/$fdir])
+    # echo "creating $dirpart/$file"
+    echo '# dummy' > "$dirpart/$file"
+  done
+done
+])
+m4trace:/usr/share/aclocal-1.10/depout.m4:64: -1- AC_DEFUN([AM_OUTPUT_DEPENDENCY_COMMANDS], [AC_CONFIG_COMMANDS([depfiles],
+     [test x"$AMDEP_TRUE" != x"" || _AM_OUTPUT_DEPENDENCY_COMMANDS],
+     [AMDEP_TRUE="$AMDEP_TRUE" ac_aux_dir="$ac_aux_dir"])
+])
+m4trace:/usr/share/aclocal-1.10/init.m4:26: -1- AC_DEFUN([AM_INIT_AUTOMAKE], [AC_PREREQ([2.60])dnl
+dnl Autoconf wants to disallow AM_ names.  We explicitly allow
+dnl the ones we care about.
+m4_pattern_allow([^AM_[A-Z]+FLAGS$])dnl
+AC_REQUIRE([AM_SET_CURRENT_AUTOMAKE_VERSION])dnl
+AC_REQUIRE([AC_PROG_INSTALL])dnl
+if test "`cd $srcdir && pwd`" != "`pwd`"; then
+  # Use -I$(srcdir) only when $(srcdir) != ., so that make's output
+  # is not polluted with repeated "-I."
+  AC_SUBST([am__isrc], [' -I$(srcdir)'])_AM_SUBST_NOTMAKE([am__isrc])dnl
+  # test to see if srcdir already configured
+  if test -f $srcdir/config.status; then
+    AC_MSG_ERROR([source directory already configured; run "make distclean" there first])
+  fi
+fi
+
+# test whether we have cygpath
+if test -z "$CYGPATH_W"; then
+  if (cygpath --version) >/dev/null 2>/dev/null; then
+    CYGPATH_W='cygpath -w'
+  else
+    CYGPATH_W=echo
+  fi
+fi
+AC_SUBST([CYGPATH_W])
+
+# Define the identity of the package.
+dnl Distinguish between old-style and new-style calls.
+m4_ifval([$2],
+[m4_ifval([$3], [_AM_SET_OPTION([no-define])])dnl
+ AC_SUBST([PACKAGE], [$1])dnl
+ AC_SUBST([VERSION], [$2])],
+[_AM_SET_OPTIONS([$1])dnl
+dnl Diagnose old-style AC_INIT with new-style AM_AUTOMAKE_INIT.
+m4_if(m4_ifdef([AC_PACKAGE_NAME], 1)m4_ifdef([AC_PACKAGE_VERSION], 1), 11,,
+  [m4_fatal([AC_INIT should be called with package and version arguments])])dnl
+ AC_SUBST([PACKAGE], ['AC_PACKAGE_TARNAME'])dnl
+ AC_SUBST([VERSION], ['AC_PACKAGE_VERSION'])])dnl
+
+_AM_IF_OPTION([no-define],,
+[AC_DEFINE_UNQUOTED(PACKAGE, "$PACKAGE", [Name of package])
+ AC_DEFINE_UNQUOTED(VERSION, "$VERSION", [Version number of package])])dnl
+
+# Some tools Automake needs.
+AC_REQUIRE([AM_SANITY_CHECK])dnl
+AC_REQUIRE([AC_ARG_PROGRAM])dnl
+AM_MISSING_PROG(ACLOCAL, aclocal-${am__api_version})
+AM_MISSING_PROG(AUTOCONF, autoconf)
+AM_MISSING_PROG(AUTOMAKE, automake-${am__api_version})
+AM_MISSING_PROG(AUTOHEADER, autoheader)
+AM_MISSING_PROG(MAKEINFO, makeinfo)
+AM_PROG_INSTALL_SH
+AM_PROG_INSTALL_STRIP
+AC_REQUIRE([AM_PROG_MKDIR_P])dnl
+# We need awk for the "check" target.  The system "awk" is bad on
+# some platforms.
+AC_REQUIRE([AC_PROG_AWK])dnl
+AC_REQUIRE([AC_PROG_MAKE_SET])dnl
+AC_REQUIRE([AM_SET_LEADING_DOT])dnl
+_AM_IF_OPTION([tar-ustar], [_AM_PROG_TAR([ustar])],
+              [_AM_IF_OPTION([tar-pax], [_AM_PROG_TAR([pax])],
+	      		     [_AM_PROG_TAR([v7])])])
+_AM_IF_OPTION([no-dependencies],,
+[AC_PROVIDE_IFELSE([AC_PROG_CC],
+                  [_AM_DEPENDENCIES(CC)],
+                  [define([AC_PROG_CC],
+                          defn([AC_PROG_CC])[_AM_DEPENDENCIES(CC)])])dnl
+AC_PROVIDE_IFELSE([AC_PROG_CXX],
+                  [_AM_DEPENDENCIES(CXX)],
+                  [define([AC_PROG_CXX],
+                          defn([AC_PROG_CXX])[_AM_DEPENDENCIES(CXX)])])dnl
+AC_PROVIDE_IFELSE([AC_PROG_OBJC],
+                  [_AM_DEPENDENCIES(OBJC)],
+                  [define([AC_PROG_OBJC],
+                          defn([AC_PROG_OBJC])[_AM_DEPENDENCIES(OBJC)])])dnl
+])
+])
+m4trace:/usr/share/aclocal-1.10/init.m4:113: -1- AC_DEFUN([_AC_AM_CONFIG_HEADER_HOOK], [# Compute $1's index in $config_headers.
+_am_arg=$1
+_am_stamp_count=1
+for _am_header in $config_headers :; do
+  case $_am_header in
+    $_am_arg | $_am_arg:* )
+      break ;;
+    * )
+      _am_stamp_count=`expr $_am_stamp_count + 1` ;;
+  esac
+done
+echo "timestamp for $_am_arg" >`AS_DIRNAME(["$_am_arg"])`/stamp-h[]$_am_stamp_count])
+m4trace:/usr/share/aclocal-1.10/install-sh.m4:11: -1- AC_DEFUN([AM_PROG_INSTALL_SH], [AC_REQUIRE([AM_AUX_DIR_EXPAND])dnl
+install_sh=${install_sh-"\$(SHELL) $am_aux_dir/install-sh"}
+AC_SUBST(install_sh)])
+m4trace:/usr/share/aclocal-1.10/lead-dot.m4:12: -1- AC_DEFUN([AM_SET_LEADING_DOT], [rm -rf .tst 2>/dev/null
+mkdir .tst 2>/dev/null
+if test -d .tst; then
+  am__leading_dot=.
+else
+  am__leading_dot=_
+fi
+rmdir .tst 2>/dev/null
+AC_SUBST([am__leading_dot])])
+m4trace:/usr/share/aclocal-1.10/make.m4:14: -1- AC_DEFUN([AM_MAKE_INCLUDE], [am_make=${MAKE-make}
+cat > confinc << 'END'
+am__doit:
+	@echo done
+.PHONY: am__doit
+END
+# If we don't find an include directive, just comment out the code.
+AC_MSG_CHECKING([for style of include used by $am_make])
+am__include="#"
+am__quote=
+_am_result=none
+# First try GNU make style include.
+echo "include confinc" > confmf
+# We grep out `Entering directory' and `Leaving directory'
+# messages which can occur if `w' ends up in MAKEFLAGS.
+# In particular we don't look at `^make:' because GNU make might
+# be invoked under some other name (usually "gmake"), in which
+# case it prints its new name instead of `make'.
+if test "`$am_make -s -f confmf 2> /dev/null | grep -v 'ing directory'`" = "done"; then
+   am__include=include
+   am__quote=
+   _am_result=GNU
+fi
+# Now try BSD make style include.
+if test "$am__include" = "#"; then
+   echo '.include "confinc"' > confmf
+   if test "`$am_make -s -f confmf 2> /dev/null`" = "done"; then
+      am__include=.include
+      am__quote="\""
+      _am_result=BSD
+   fi
+fi
+AC_SUBST([am__include])
+AC_SUBST([am__quote])
+AC_MSG_RESULT([$_am_result])
+rm -f confinc confmf
+])
+m4trace:/usr/share/aclocal-1.10/missing.m4:14: -1- AC_DEFUN([AM_MISSING_PROG], [AC_REQUIRE([AM_MISSING_HAS_RUN])
+$1=${$1-"${am_missing_run}$2"}
+AC_SUBST($1)])
+m4trace:/usr/share/aclocal-1.10/missing.m4:24: -1- AC_DEFUN([AM_MISSING_HAS_RUN], [AC_REQUIRE([AM_AUX_DIR_EXPAND])dnl
+AC_REQUIRE_AUX_FILE([missing])dnl
+test x"${MISSING+set}" = xset || MISSING="\${SHELL} $am_aux_dir/missing"
+# Use eval to expand $SHELL
+if eval "$MISSING --run true"; then
+  am_missing_run="$MISSING --run "
+else
+  am_missing_run=
+  AC_MSG_WARN([`missing' script is too old or missing])
+fi
+])
+m4trace:/usr/share/aclocal-1.10/mkdirp.m4:11: -1- AC_DEFUN([AM_PROG_MKDIR_P], [AC_PREREQ([2.60])dnl
+AC_REQUIRE([AC_PROG_MKDIR_P])dnl
+dnl Automake 1.8 to 1.9.6 used to define mkdir_p.  We now use MKDIR_P,
+dnl while keeping a definition of mkdir_p for backward compatibility.
+dnl @MKDIR_P@ is magic: AC_OUTPUT adjusts its value for each Makefile.
+dnl However we cannot define mkdir_p as $(MKDIR_P) for the sake of
+dnl Makefile.ins that do not define MKDIR_P, so we do our own
+dnl adjustment using top_builddir (which is defined more often than
+dnl MKDIR_P).
+AC_SUBST([mkdir_p], ["$MKDIR_P"])dnl
+case $mkdir_p in
+  [[\\/$]]* | ?:[[\\/]]*) ;;
+  */*) mkdir_p="\$(top_builddir)/$mkdir_p" ;;
+esac
+])
+m4trace:/usr/share/aclocal-1.10/options.m4:13: -1- AC_DEFUN([_AM_MANGLE_OPTION], [[_AM_OPTION_]m4_bpatsubst($1, [[^a-zA-Z0-9_]], [_])])
+m4trace:/usr/share/aclocal-1.10/options.m4:19: -1- AC_DEFUN([_AM_SET_OPTION], [m4_define(_AM_MANGLE_OPTION([$1]), 1)])
+m4trace:/usr/share/aclocal-1.10/options.m4:25: -1- AC_DEFUN([_AM_SET_OPTIONS], [AC_FOREACH([_AM_Option], [$1], [_AM_SET_OPTION(_AM_Option)])])
+m4trace:/usr/share/aclocal-1.10/options.m4:31: -1- AC_DEFUN([_AM_IF_OPTION], [m4_ifset(_AM_MANGLE_OPTION([$1]), [$2], [$3])])
+m4trace:/usr/share/aclocal-1.10/runlog.m4:12: -1- AC_DEFUN([AM_RUN_LOG], [{ echo "$as_me:$LINENO: $1" >&AS_MESSAGE_LOG_FD
+   ($1) >&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD
+   ac_status=$?
+   echo "$as_me:$LINENO: \$? = $ac_status" >&AS_MESSAGE_LOG_FD
+   (exit $ac_status); }])
+m4trace:/usr/share/aclocal-1.10/sanity.m4:14: -1- AC_DEFUN([AM_SANITY_CHECK], [AC_MSG_CHECKING([whether build environment is sane])
+# Just in case
+sleep 1
+echo timestamp > conftest.file
+# Do `set' in a subshell so we don't clobber the current shell's
+# arguments.  Must try -L first in case configure is actually a
+# symlink; some systems play weird games with the mod time of symlinks
+# (eg FreeBSD returns the mod time of the symlink's containing
+# directory).
+if (
+   set X `ls -Lt $srcdir/configure conftest.file 2> /dev/null`
+   if test "$[*]" = "X"; then
+      # -L didn't work.
+      set X `ls -t $srcdir/configure conftest.file`
+   fi
+   rm -f conftest.file
+   if test "$[*]" != "X $srcdir/configure conftest.file" \
+      && test "$[*]" != "X conftest.file $srcdir/configure"; then
+
+      # If neither matched, then we have a broken ls.  This can happen
+      # if, for instance, CONFIG_SHELL is bash and it inherits a
+      # broken ls alias from the environment.  This has actually
+      # happened.  Such a system could not be considered "sane".
+      AC_MSG_ERROR([ls -t appears to fail.  Make sure there is not a broken
+alias in your environment])
+   fi
+
+   test "$[2]" = conftest.file
+   )
+then
+   # Ok.
+   :
+else
+   AC_MSG_ERROR([newly created file is older than distributed files!
+Check your system clock])
+fi
+AC_MSG_RESULT(yes)])
+m4trace:/usr/share/aclocal-1.10/strip.m4:17: -1- AC_DEFUN([AM_PROG_INSTALL_STRIP], [AC_REQUIRE([AM_PROG_INSTALL_SH])dnl
+# Installed binaries are usually stripped using `strip' when the user
+# run `make install-strip'.  However `strip' might not be the right
+# tool to use in cross-compilation environments, therefore Automake
+# will honor the `STRIP' environment variable to overrule this program.
+dnl Don't test for $cross_compiling = yes, because it might be `maybe'.
+if test "$cross_compiling" != no; then
+  AC_CHECK_TOOL([STRIP], [strip], :)
+fi
+INSTALL_STRIP_PROGRAM="\$(install_sh) -c -s"
+AC_SUBST([INSTALL_STRIP_PROGRAM])])
+m4trace:/usr/share/aclocal-1.10/substnot.m4:12: -1- AC_DEFUN([_AM_SUBST_NOTMAKE])
+m4trace:/usr/share/aclocal-1.10/tar.m4:24: -1- AC_DEFUN([_AM_PROG_TAR], [# Always define AMTAR for backward compatibility.
+AM_MISSING_PROG([AMTAR], [tar])
+m4_if([$1], [v7],
+     [am__tar='${AMTAR} chof - "$$tardir"'; am__untar='${AMTAR} xf -'],
+     [m4_case([$1], [ustar],, [pax],,
+              [m4_fatal([Unknown tar format])])
+AC_MSG_CHECKING([how to create a $1 tar archive])
+# Loop over all known methods to create a tar archive until one works.
+_am_tools='gnutar m4_if([$1], [ustar], [plaintar]) pax cpio none'
+_am_tools=${am_cv_prog_tar_$1-$_am_tools}
+# Do not fold the above two line into one, because Tru64 sh and
+# Solaris sh will not grok spaces in the rhs of `-'.
+for _am_tool in $_am_tools
+do
+  case $_am_tool in
+  gnutar)
+    for _am_tar in tar gnutar gtar;
+    do
+      AM_RUN_LOG([$_am_tar --version]) && break
+    done
+    am__tar="$_am_tar --format=m4_if([$1], [pax], [posix], [$1]) -chf - "'"$$tardir"'
+    am__tar_="$_am_tar --format=m4_if([$1], [pax], [posix], [$1]) -chf - "'"$tardir"'
+    am__untar="$_am_tar -xf -"
+    ;;
+  plaintar)
+    # Must skip GNU tar: if it does not support --format= it doesn't create
+    # ustar tarball either.
+    (tar --version) >/dev/null 2>&1 && continue
+    am__tar='tar chf - "$$tardir"'
+    am__tar_='tar chf - "$tardir"'
+    am__untar='tar xf -'
+    ;;
+  pax)
+    am__tar='pax -L -x $1 -w "$$tardir"'
+    am__tar_='pax -L -x $1 -w "$tardir"'
+    am__untar='pax -r'
+    ;;
+  cpio)
+    am__tar='find "$$tardir" -print | cpio -o -H $1 -L'
+    am__tar_='find "$tardir" -print | cpio -o -H $1 -L'
+    am__untar='cpio -i -H $1 -d'
+    ;;
+  none)
+    am__tar=false
+    am__tar_=false
+    am__untar=false
+    ;;
+  esac
+
+  # If the value was cached, stop now.  We just wanted to have am__tar
+  # and am__untar set.
+  test -n "${am_cv_prog_tar_$1}" && break
+
+  # tar/untar a dummy directory, and stop if the command works
+  rm -rf conftest.dir
+  mkdir conftest.dir
+  echo GrepMe > conftest.dir/file
+  AM_RUN_LOG([tardir=conftest.dir && eval $am__tar_ >conftest.tar])
+  rm -rf conftest.dir
+  if test -s conftest.tar; then
+    AM_RUN_LOG([$am__untar <conftest.tar])
+    grep GrepMe conftest.dir/file >/dev/null 2>&1 && break
+  fi
+done
+rm -rf conftest.dir
+
+AC_CACHE_VAL([am_cv_prog_tar_$1], [am_cv_prog_tar_$1=$_am_tool])
+AC_MSG_RESULT([$am_cv_prog_tar_$1])])
+AC_SUBST([am__tar])
+AC_SUBST([am__untar])
+])
+m4trace:m4macros/netcdf.m4:24: -1- AC_DEFUN([AC_PATH_NETCDF], [
+AC_ARG_WITH( nc_config, [  --with-nc-config=path to nc-config script from netcdf v4 package],  NC_CONFIG=$withval)
+dnl
+dnl
+dnl =================================================================================
+dnl check for netcdf include directory
+dnl
+err=0
+if test x$NC_CONFIG = x; then
+	NC_CONFIG_SHORT=nc-config
+	NC_CONFIG_FULLQUAL=nc-config
+	NC_CONFIG_PATH=$PATH
+else
+	echo "user specified nc-config is $NC_CONFIG"
+	NC_CONFIG_SHORT=`basename $NC_CONFIG`
+	NC_CONFIG_FULLQUAL=$NC_CONFIG
+	NC_CONFIG_PATH=`dirname $NC_CONFIG`
+fi
+AC_CHECK_PROG( HAS_NC_CONFIG, [$NC_CONFIG_SHORT], [yes], [no], [$NC_CONFIG_PATH] )
+if test x$HAS_NC_CONFIG = xno; then
+	echo "-----------------------------------------------------------------------------------"
+	echo "Error, nc-config not found or not executable.  This is a script that comes with the"
+	echo "netcdf library, version 4.1-beta2 or later, and must be present for configuration"
+	echo "to succeed."
+	echo " "
+	echo "If you installed the netcdf library (and nc-config) in a standard location, nc-config"
+	echo "should be found automatically.  Otherwise, you can specify the full path and name of"
+	echo "the nc-config script by passing the --with-nc-config=/full/path/nc-config argument"
+	echo "flag to the configure script.  For example:"
+	echo " "
+	echo "./configure --with-nc-config=/sw/dist/netcdf4/nc-config"
+	echo " "
+	echo "Special note for R users:"
+	echo "-------------------------"
+	echo "To pass the configure flag to R, use something like this:"
+	echo " "
+	echo "R CMD INSTALL --configure-args=\"--with-nc-config=/home/joe/bin/nc-config\" ncdf4"
+	echo " "
+	echo "where you should replace /home/joe/bin etc. with the location where you have"
+	echo "installed the nc-config script that came with the netcdf 4 distribution."
+	echo "-----------------------------------------------------------------------------------"
+	exit -1
+fi
+dnl
+NETCDF_CC=`$NC_CONFIG_FULLQUAL --cc`
+NETCDF_LDFLAGS=`$NC_CONFIG_FULLQUAL --libs`
+NETCDF_CPPFLAGS=`$NC_CONFIG_FULLQUAL --cflags`
+NETCDF_VERSION=`$NC_CONFIG_FULLQUAL --version`
+dnl
+dnl The following will be either "yes" or "no"
+NETCDF_V4=`$NC_CONFIG_FULLQUAL --has-nc4`
+dnl
+dnl If we get here, we assume that netcdf exists.  It might not if, for example,
+dnl the package was installed and nc-config is present, but then the libraries
+dnl were erased.  Assume such deliberately broken behavior is not the case.
+dnl
+AC_DEFINE([HAVE_NETCDF],1,[Define if you have the NETCDF library, either v3 or v4])
+dnl
+if test x$NETCDF_V4 = xyes; then
+	AC_DEFINE([HAVE_NETCDF4],1,[Define if you have version 4 of the NETCDF library])
+fi
+dnl -----------------------------------------------------------------------------------
+dnl At this piont, $NETCDF_V4 will be either "yes" or "no"
+dnl
+echo "Netcdf library version: $NETCDF_VERSION"
+echo "Netcdf library has version 4 interface present: $NETCDF_V4"
+echo "Netcdf library was compiled with C compiler: $NETCDF_CC"
+dnl
+dnl Export our variables
+dnl
+AC_SUBST(NETCDF_CPPFLAGS)
+AC_SUBST(NETCDF_LDFLAGS)
+AC_SUBST(NETCDF_LIBS)
+AC_SUBST(NETCDF_VERSION)
+AC_SUBST(NETCDF_CC)
+dnl
+])
+m4trace:m4macros/png.m4:18: -1- AC_DEFUN([AC_PATH_PNG], [
+AC_ARG_WITH( png_incdir, [  --with-png_incdir=dir directory containing png includes],  PNG_INCDIR=$withval)
+dnl
+dnl
+dnl =================================================================================
+dnl check for png include directory
+dnl
+err=0
+if test x$PNG_INCDIR != x; then
+        AC_CHECK_HEADER( $PNG_INCDIR/png.h,
+          echo "Using user-specified png include dir=$PNG_INCDIR",
+          err=1 )
+	if test $err -eq 1; then
+		echo "--------------------------------------------------------------------------------"
+		echo "Error: You specified that the pnginclude directory is $PNG_INCDIR"
+		echo "but that directory does NOT have required png include file png.h."
+		echo "You must specify a directory that has the png include files"
+		echo "--------------------------------------------------------------------------------"
+		exit -1
+	fi
+fi
+if test $err -eq 1; then
+        echo "Error: user specified png include directory does not have png.h!"
+        exit -1
+fi
+if test x$PNG_INCDIR = x; then
+        AC_CHECK_HEADER( png.h, PNG_INCDIR=. )
+fi
+if test x$PNG_INCDIR = x; then
+        AC_CHECK_HEADER( /usr/local/include/png.h, PNG_INCDIR=/usr/local/include )
+fi
+if test x$PNG_INCDIR = x; then
+        AC_CHECK_HEADER( /usr/include/png.h, PNG_INCDIR=/usr/include )
+fi
+if test x$PNG_INCDIR = x; then
+        AC_CHECK_HEADER( $HOME/include/png.h, PNG_INCDIR=$HOME/include )
+fi
+if test x$PNG_INCDIR = x; then
+        AC_CHECK_HEADER( /sw/include/png.h, PNG_INCDIR=/sw/include )
+fi
+dnl
+PNG_INC_PRESENT=no
+if test x$PNG_INCDIR != x; then
+	PNG_INC_PRESENT=yes
+        PNG_CPPFLAGS=-I$PNG_INCDIR
+else
+	echo "** Could not find the png.h file, so -frames support will not be included  **"
+	echo "** Install the PNG library (and development headers) to fix this           **"
+fi
+dnl =================================================================================
+dnl check for png lib directory
+dnl
+PNG_LIBNAME=libpng.so
+dnl
+AC_ARG_WITH( png_libdir, [  --with-png_libdir=dir directory containing png library],  PNG_LIBDIR=$withval)
+err=0
+if test x$PNG_LIBDIR != x; then
+        AC_CHECK_FILE( $PNG_LIBDIR/$PNG_LIBNAME,
+          echo "Using user-specified png library dir=$PNG_LIBDIR",
+          err=1 )
+fi
+if test $err -eq 1; then
+        echo "Error: user specified png library directory does not have $PNG_LIBNAME !"
+        exit -1
+fi
+if test x$PNG_LIBDIR = x; then
+        AC_CHECK_LIB( png, png_write_png, PNG_LIBDIR=. )
+fi
+if test x$PNG_LIBDIR = x; then
+        AC_CHECK_FILE( /usr/local/lib/$PNG_LIBNAME, PNG_LIBDIR=/usr/local/lib )
+fi
+if test x$PNG_LIBDIR = x; then
+        AC_CHECK_FILE( /usr/lib/$PNG_LIBNAME, PNG_LIBDIR=/usr/lib )
+fi
+if test x$PNG_LIBDIR = x; then
+        AC_CHECK_FILE( /lib/$PNG_LIBNAME, PNG_LIBDIR=/lib )
+fi
+if test x$PNG_LIBDIR = x; then
+        AC_CHECK_FILE( $HOME/lib/$PNG_LIBNAME, PNG_LIBDIR=$HOME/lib )
+fi
+if test x$PNG_LIBDIR = x; then
+        AC_CHECK_FILE( /sw/lib/$PNG_LIBNAME, PNG_LIBDIR=/sw/lib )
+fi
+PNG_LIBNAME=`echo $PNG_LIBNAME | sed s/lib// | sed s/\.so//`
+dnl
+PNG_PRESENT=no
+if test $PNG_INC_PRESENT = yes; then
+	if test x$PNG_LIBDIR != x; then
+		PNG_PRESENT=yes
+		PNG_LIBS=-l$PNG_LIBNAME
+		PNG_LDFLAGS="-L$PNG_LIBDIR $PNG_LIBS"
+		AC_DEFINE([HAVE_PNG],1,[Define if you have PNG library])
+	fi
+fi
+dnl
+dnl Export our variables
+dnl
+AC_SUBST(PNG_CPPFLAGS)
+AC_SUBST(PNG_LDFLAGS)
+AC_SUBST(PNG_LIBS)
+dnl
+])
+m4trace:m4macros/udunits2.m4:19: -1- AC_DEFUN([AC_PATH_UDUNITS2], [
+AC_ARG_WITH( udunits2_incdir, [  --with-udunits2_incdir=dir directory containing udunits2 includes],  UDUNITS2_INCDIR=$withval)
+dnl
+dnl
+dnl =================================================================================
+dnl check for udunits2 include directory
+dnl
+err=0
+if test x$UDUNITS2_INCDIR != x; then
+        AC_CHECK_HEADER( $UDUNITS2_INCDIR/converter.h,
+          echo "Using user-specified udunits2 include dir=$UDUNITS2_INCDIR",
+          err=1 )
+	if test $err -eq 1; then
+		echo "--------------------------------------------------------------------------------"
+		echo "Error: You specified that the udunits-2 include directory is $UDUNITS2_INCDIR"
+		echo "but that directory does NOT have required udunits-2 include file converter.h."
+		echo "You must specify a directory that has ALL the udunits-2 include files"
+		echo "(converter.h as well as udunits2.h)."
+		echo "--------------------------------------------------------------------------------"
+		exit -1
+	fi
+        AC_CHECK_HEADER( $UDUNITS2_INCDIR/udunits2.h,
+          echo "Using user-specified udunits2 include dir=$UDUNITS2_INCDIR",
+          err=1 )
+fi
+if test $err -eq 1; then
+        echo "Error: user specified udunits2 include directory does not have udunits2.h!"
+        exit -1
+fi
+if test x$UDUNITS2_INCDIR = x; then
+        AC_CHECK_HEADER( udunits2.h, UDUNITS2_INCDIR=. )
+fi
+if test x$UDUNITS2_INCDIR = x; then
+        AC_CHECK_HEADER( /usr/local/include/udunits2.h, UDUNITS2_INCDIR=/usr/local/include )
+fi
+if test x$UDUNITS2_INCDIR = x; then
+        AC_CHECK_HEADER( /usr/include/udunits2.h, UDUNITS2_INCDIR=/usr/include )
+fi
+if test x$UDUNITS2_INCDIR = x; then
+        AC_CHECK_HEADER( $HOME/include/udunits2.h, UDUNITS2_INCDIR=$HOME/include )
+fi
+if test x$UDUNITS2_INCDIR = x; then
+        AC_CHECK_HEADER( /sw/include/udunits2.h, UDUNITS2_INCDIR=/sw/include )
+fi
+dnl
+UDUNITS2_INC_PRESENT=no
+if test x$UDUNITS2_INCDIR != x; then
+	UDUNITS2_INC_PRESENT=yes
+        UDUNITS2_CPPFLAGS=-I$UDUNITS2_INCDIR
+else
+	echo "** Could not find the udunits2.h file, udunits support will not be included **"
+fi
+dnl =================================================================================
+dnl check for udunits2 lib directory
+dnl
+UDUNITS2_LIBNAME=libudunits2.a
+dnl
+AC_ARG_WITH( udunits2_libdir, [  --with-udunits2_libdir=dir directory containing udunits2 library],  UDUNITS2_LIBDIR=$withval)
+err=0
+if test x$UDUNITS2_LIBDIR != x; then
+        AC_CHECK_FILE( $UDUNITS2_LIBDIR/$UDUNITS2_LIBNAME,
+          echo "Using user-specified udunits2 library dir=$UDUNITS2_LIBDIR",
+          err=1 )
+fi
+if test $err -eq 1; then
+        echo "Error: user specified udunits2 library directory does not have $UDUNITS2_LIBNAME !"
+        exit -1
+fi
+if test x$NETCDF_LIBDIR = x; then
+        AC_CHECK_LIB( udunits2, ut_read_xml, UDUNITS2_LIBDIR=. )
+fi
+if test x$UDUNITS2_LIBDIR = x; then
+        AC_CHECK_FILE( /usr/local/lib/$UDUNITS2_LIBNAME, UDUNITS2_LIBDIR=/usr/local/lib )
+fi
+if test x$UDUNITS2_LIBDIR = x; then
+        AC_CHECK_FILE( /usr/lib/$UDUNITS2_LIBNAME, UDUNITS2_LIBDIR=/usr/lib )
+fi
+if test x$UDUNITS2_LIBDIR = x; then
+        AC_CHECK_FILE( /lib/$UDUNITS2_LIBNAME, UDUNITS2_LIBDIR=/lib )
+fi
+if test x$UDUNITS2_LIBDIR = x; then
+        AC_CHECK_FILE( $HOME/lib/$UDUNITS2_LIBNAME, UDUNITS2_LIBDIR=$HOME/lib )
+fi
+if test x$UDUNITS2_LIBDIR = x; then
+        AC_CHECK_FILE( /sw/lib/$UDUNITS2_LIBNAME, UDUNITS2_LIBDIR=/sw/lib )
+fi
+UDUNITS2_LIBNAME=`echo $UDUNITS2_LIBNAME | sed s/lib// | sed s/\.a//`
+dnl
+UDUNITS2_PRESENT=no
+if test $UDUNITS2_INC_PRESENT = yes; then
+	if test x$UDUNITS2_LIBDIR != x; then
+		UDUNITS2_PRESENT=yes
+		UDUNITS2_LIBS=-l$UDUNITS2_LIBNAME
+		UDUNITS2_LDFLAGS="-L$UDUNITS2_LIBDIR $UDUNITS2_LIBS"
+		AC_DEFINE([HAVE_UDUNITS2],1,[Define if you have udunits-2 library])
+	fi
+fi
+dnl
+dnl ------------------------------------------------------------------------
+dnl New feature of udunits2: it now depends on the expat library.  Add that
+dnl to the flags as well.
+dnl ------------------------------------------------------------------------
+if test $UDUNITS2_PRESENT = yes; then
+	haveExpat=yes
+	LIBSsave=$LIBS
+	CFLAGSsave=$CFLAGS
+	LIBS=$UDUNITS2_LDFLAGS
+	AC_MSG_CHECKING([for expat library (required by udunits2)])
+	AC_MSG_RESULT()
+	AC_CHECK_LIB(expat,XML_GetBase,[],[haveExpat=no])
+	if test x"$haveExpat"x != "xyesx"; then
+	  AC_MSG_ERROR([Could not find the expat library despite the fact that the udunits2 library is installed.  This probably means some sort of configuration file error. Please consult with the package maintainer.])
+	  exit -1
+	fi
+	EXPAT_LIBS=$LIBS
+	echo "Expat libraries (needed by udunits2): $EXPAT_LIBS"
+	UDUNITS2_LDFLAGS="$UDUNITS2_LDFLAGS $LIBS"
+	LIBS=$LIBSsave
+	CFLAGS=$CFLAGSsave
+fi
+
+dnl Export our variables
+dnl
+AC_SUBST(UDUNITS2_CPPFLAGS)
+AC_SUBST(UDUNITS2_LDFLAGS)
+AC_SUBST(UDUNITS2_LIBS)
+dnl
+])
+m4trace:configure.in:10: -1- m4_pattern_forbid([^_?A[CHUM]_])
+m4trace:configure.in:10: -1- m4_pattern_forbid([_AC_])
+m4trace:configure.in:10: -1- m4_pattern_forbid([^LIBOBJS$], [do not use LIBOBJS directly, use AC_LIBOBJ (see section `AC_LIBOBJ vs LIBOBJS'])
+m4trace:configure.in:10: -1- m4_pattern_allow([^AS_FLAGS$])
+m4trace:configure.in:10: -1- m4_pattern_forbid([^_?m4_])
+m4trace:configure.in:10: -1- m4_pattern_forbid([^dnl$])
+m4trace:configure.in:10: -1- m4_pattern_forbid([^_?AS_])
+m4trace:configure.in:10: -1- m4_pattern_allow([^SHELL$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^PATH_SEPARATOR$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^PACKAGE_NAME$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^PACKAGE_TARNAME$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^PACKAGE_VERSION$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^PACKAGE_STRING$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^PACKAGE_BUGREPORT$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^exec_prefix$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^prefix$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^program_transform_name$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^bindir$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^sbindir$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^libexecdir$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^datarootdir$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^datadir$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^sysconfdir$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^sharedstatedir$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^localstatedir$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^includedir$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^oldincludedir$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^docdir$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^infodir$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^htmldir$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^dvidir$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^pdfdir$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^psdir$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^libdir$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^localedir$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^mandir$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^PACKAGE_NAME$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^PACKAGE_TARNAME$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^PACKAGE_VERSION$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^PACKAGE_STRING$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^PACKAGE_BUGREPORT$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^DEFS$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^ECHO_C$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^ECHO_N$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^ECHO_T$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^LIBS$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^build_alias$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^host_alias$])
+m4trace:configure.in:10: -1- m4_pattern_allow([^target_alias$])
+m4trace:configure.in:13: -1- AC_PATH_NETCDF
+m4trace:configure.in:13: -1- m4_pattern_allow([^HAS_NC_CONFIG$])
+m4trace:configure.in:13: -1- m4_pattern_allow([^HAVE_NETCDF$])
+m4trace:configure.in:13: -1- m4_pattern_allow([^HAVE_NETCDF4$])
+m4trace:configure.in:13: -1- m4_pattern_allow([^NETCDF_CPPFLAGS$])
+m4trace:configure.in:13: -1- m4_pattern_allow([^NETCDF_LDFLAGS$])
+m4trace:configure.in:13: -1- m4_pattern_allow([^NETCDF_LIBS$])
+m4trace:configure.in:13: -1- m4_pattern_allow([^NETCDF_VERSION$])
+m4trace:configure.in:13: -1- m4_pattern_allow([^NETCDF_CC$])
+m4trace:configure.in:33: -1- m4_pattern_allow([^CC$])
+m4trace:configure.in:33: -1- m4_pattern_allow([^CFLAGS$])
+m4trace:configure.in:33: -1- m4_pattern_allow([^LDFLAGS$])
+m4trace:configure.in:33: -1- m4_pattern_allow([^LIBS$])
+m4trace:configure.in:33: -1- m4_pattern_allow([^CPPFLAGS$])
+m4trace:configure.in:33: -1- m4_pattern_allow([^CC$])
+m4trace:configure.in:33: -1- m4_pattern_allow([^ac_ct_CC$])
+m4trace:configure.in:33: -1- m4_pattern_allow([^EXEEXT$])
+m4trace:configure.in:33: -1- m4_pattern_allow([^OBJEXT$])
+m4trace:configure.in:35: -1- m4_pattern_allow([^CPP$])
+m4trace:configure.in:35: -1- m4_pattern_allow([^CPPFLAGS$])
+m4trace:configure.in:35: -1- m4_pattern_allow([^CPP$])
+m4trace:configure.in:35: -1- m4_pattern_allow([^GREP$])
+m4trace:configure.in:35: -1- m4_pattern_allow([^GREP$])
+m4trace:configure.in:35: -1- m4_pattern_allow([^EGREP$])
+m4trace:configure.in:35: -1- m4_pattern_allow([^EGREP$])
+m4trace:configure.in:35: -1- m4_pattern_allow([^STDC_HEADERS$])
+m4trace:configure.in:39: -1- AM_INIT_AUTOMAKE([ncview], [ncview_version])
+m4trace:configure.in:39: -1- m4_pattern_allow([^AM_[A-Z]+FLAGS$])
+m4trace:configure.in:39: -1- AM_SET_CURRENT_AUTOMAKE_VERSION
+m4trace:configure.in:39: -1- AM_AUTOMAKE_VERSION([1.10.1])
+m4trace:configure.in:39: -1- _AM_AUTOCONF_VERSION([2.61])
+m4trace:configure.in:39: -1- m4_pattern_allow([^INSTALL_PROGRAM$])
+m4trace:configure.in:39: -1- m4_pattern_allow([^INSTALL_SCRIPT$])
+m4trace:configure.in:39: -1- m4_pattern_allow([^INSTALL_DATA$])
+m4trace:configure.in:39: -1- m4_pattern_allow([^am__isrc$])
+m4trace:configure.in:39: -1- _AM_SUBST_NOTMAKE([am__isrc])
+m4trace:configure.in:39: -1- m4_pattern_allow([^CYGPATH_W$])
+m4trace:configure.in:39: -1- m4_pattern_allow([^PACKAGE$])
+m4trace:configure.in:39: -1- m4_pattern_allow([^VERSION$])
+m4trace:configure.in:39: -1- _AM_IF_OPTION([no-define], [], [AC_DEFINE_UNQUOTED(PACKAGE, "$PACKAGE", [Name of package])
+ AC_DEFINE_UNQUOTED(VERSION, "$VERSION", [Version number of package])])
+m4trace:configure.in:39: -2- _AM_MANGLE_OPTION([no-define])
+m4trace:configure.in:39: -1- m4_pattern_allow([^PACKAGE$])
+m4trace:configure.in:39: -1- m4_pattern_allow([^VERSION$])
+m4trace:configure.in:39: -1- AM_SANITY_CHECK
+m4trace:configure.in:39: -1- AM_MISSING_PROG([ACLOCAL], [aclocal-${am__api_version}])
+m4trace:configure.in:39: -1- AM_MISSING_HAS_RUN
+m4trace:configure.in:39: -1- AM_AUX_DIR_EXPAND
+m4trace:configure.in:39: -1- m4_pattern_allow([^ACLOCAL$])
+m4trace:configure.in:39: -1- AM_MISSING_PROG([AUTOCONF], [autoconf])
+m4trace:configure.in:39: -1- m4_pattern_allow([^AUTOCONF$])
+m4trace:configure.in:39: -1- AM_MISSING_PROG([AUTOMAKE], [automake-${am__api_version}])
+m4trace:configure.in:39: -1- m4_pattern_allow([^AUTOMAKE$])
+m4trace:configure.in:39: -1- AM_MISSING_PROG([AUTOHEADER], [autoheader])
+m4trace:configure.in:39: -1- m4_pattern_allow([^AUTOHEADER$])
+m4trace:configure.in:39: -1- AM_MISSING_PROG([MAKEINFO], [makeinfo])
+m4trace:configure.in:39: -1- m4_pattern_allow([^MAKEINFO$])
+m4trace:configure.in:39: -1- AM_PROG_INSTALL_SH
+m4trace:configure.in:39: -1- m4_pattern_allow([^install_sh$])
+m4trace:configure.in:39: -1- AM_PROG_INSTALL_STRIP
+m4trace:configure.in:39: -1- m4_pattern_allow([^STRIP$])
+m4trace:configure.in:39: -1- m4_pattern_allow([^INSTALL_STRIP_PROGRAM$])
+m4trace:configure.in:39: -1- AM_PROG_MKDIR_P
+m4trace:configure.in:39: -1- m4_pattern_allow([^mkdir_p$])
+m4trace:configure.in:39: -1- m4_pattern_allow([^AWK$])
+m4trace:configure.in:39: -1- m4_pattern_allow([^SET_MAKE$])
+m4trace:configure.in:39: -1- AM_SET_LEADING_DOT
+m4trace:configure.in:39: -1- m4_pattern_allow([^am__leading_dot$])
+m4trace:configure.in:39: -1- _AM_IF_OPTION([tar-ustar], [_AM_PROG_TAR([ustar])], [_AM_IF_OPTION([tar-pax], [_AM_PROG_TAR([pax])],
+	      		     [_AM_PROG_TAR([v7])])])
+m4trace:configure.in:39: -2- _AM_MANGLE_OPTION([tar-ustar])
+m4trace:configure.in:39: -1- _AM_IF_OPTION([tar-pax], [_AM_PROG_TAR([pax])], [_AM_PROG_TAR([v7])])
+m4trace:configure.in:39: -2- _AM_MANGLE_OPTION([tar-pax])
+m4trace:configure.in:39: -1- _AM_PROG_TAR([v7])
+m4trace:configure.in:39: -1- AM_MISSING_PROG([AMTAR], [tar])
+m4trace:configure.in:39: -1- m4_pattern_allow([^AMTAR$])
+m4trace:configure.in:39: -1- m4_pattern_allow([^am__tar$])
+m4trace:configure.in:39: -1- m4_pattern_allow([^am__untar$])
+m4trace:configure.in:39: -1- _AM_IF_OPTION([no-dependencies], [], [AC_PROVIDE_IFELSE([AC_PROG_CC],
+                  [_AM_DEPENDENCIES(CC)],
+                  [define([AC_PROG_CC],
+                          defn([AC_PROG_CC])[_AM_DEPENDENCIES(CC)])])dnl
+AC_PROVIDE_IFELSE([AC_PROG_CXX],
+                  [_AM_DEPENDENCIES(CXX)],
+                  [define([AC_PROG_CXX],
+                          defn([AC_PROG_CXX])[_AM_DEPENDENCIES(CXX)])])dnl
+AC_PROVIDE_IFELSE([AC_PROG_OBJC],
+                  [_AM_DEPENDENCIES(OBJC)],
+                  [define([AC_PROG_OBJC],
+                          defn([AC_PROG_OBJC])[_AM_DEPENDENCIES(OBJC)])])dnl
+])
+m4trace:configure.in:39: -2- _AM_MANGLE_OPTION([no-dependencies])
+m4trace:configure.in:39: -1- _AM_DEPENDENCIES([CC])
+m4trace:configure.in:39: -1- AM_SET_DEPDIR
+m4trace:configure.in:39: -1- m4_pattern_allow([^DEPDIR$])
+m4trace:configure.in:39: -1- AM_OUTPUT_DEPENDENCY_COMMANDS
+m4trace:configure.in:39: -1- AM_MAKE_INCLUDE
+m4trace:configure.in:39: -1- m4_pattern_allow([^am__include$])
+m4trace:configure.in:39: -1- m4_pattern_allow([^am__quote$])
+m4trace:configure.in:39: -1- AM_DEP_TRACK
+m4trace:configure.in:39: -1- AM_CONDITIONAL([AMDEP], [test "x$enable_dependency_tracking" != xno])
+m4trace:configure.in:39: -1- m4_pattern_allow([^AMDEP_TRUE$])
+m4trace:configure.in:39: -1- m4_pattern_allow([^AMDEP_FALSE$])
+m4trace:configure.in:39: -1- _AM_SUBST_NOTMAKE([AMDEP_TRUE])
+m4trace:configure.in:39: -1- _AM_SUBST_NOTMAKE([AMDEP_FALSE])
+m4trace:configure.in:39: -1- m4_pattern_allow([^AMDEPBACKSLASH$])
+m4trace:configure.in:39: -1- _AM_SUBST_NOTMAKE([AMDEPBACKSLASH])
+m4trace:configure.in:39: -1- m4_pattern_allow([^CCDEPMODE$])
+m4trace:configure.in:39: -1- AM_CONDITIONAL([am__fastdepCC], [
+  test "x$enable_dependency_tracking" != xno \
+  && test "$am_cv_CC_dependencies_compiler_type" = gcc3])
+m4trace:configure.in:39: -1- m4_pattern_allow([^am__fastdepCC_TRUE$])
+m4trace:configure.in:39: -1- m4_pattern_allow([^am__fastdepCC_FALSE$])
+m4trace:configure.in:39: -1- _AM_SUBST_NOTMAKE([am__fastdepCC_TRUE])
+m4trace:configure.in:39: -1- _AM_SUBST_NOTMAKE([am__fastdepCC_FALSE])
+m4trace:configure.in:41: -1- m4_pattern_allow([^XMKMF$])
+m4trace:configure.in:66: -1- m4_pattern_allow([^X_DISPLAY_MISSING$])
+m4trace:configure.in:66: -1- m4_pattern_allow([^X_CFLAGS$])
+m4trace:configure.in:66: -1- m4_pattern_allow([^X_PRE_LIBS$])
+m4trace:configure.in:66: -1- m4_pattern_allow([^X_LIBS$])
+m4trace:configure.in:66: -1- m4_pattern_allow([^X_EXTRA_LIBS$])
+m4trace:configure.in:81: -1- m4_pattern_allow([^HAVE_LIBXT$])
+m4trace:configure.in:82: -1- m4_pattern_allow([^HAVE_LIBXAW$])
+m4trace:configure.in:86: -1- m4_pattern_allow([^HAVE_LIBXAW3D$])
+m4trace:configure.in:101: -1- m4_pattern_allow([^XAW_LIBS$])
+m4trace:configure.in:116: -1- m4_pattern_allow([^HAVE_LIBX11$])
+m4trace:configure.in:122: -1- m4_pattern_allow([^X11_LIBS$])
+m4trace:configure.in:127: -1- AC_PATH_UDUNITS2
+m4trace:configure.in:127: -1- _m4_warn([cross], [cannot check for file existence when cross compiling], [../../lib/autoconf/general.m4:2491: AC_CHECK_FILE is expanded from...
+m4macros/udunits2.m4:19: AC_PATH_UDUNITS2 is expanded from...
+configure.in:127: the top level])
+m4trace:configure.in:127: -1- _m4_warn([cross], [cannot check for file existence when cross compiling], [../../lib/autoconf/general.m4:2491: AC_CHECK_FILE is expanded from...
+m4macros/udunits2.m4:19: AC_PATH_UDUNITS2 is expanded from...
+configure.in:127: the top level])
+m4trace:configure.in:127: -1- _m4_warn([cross], [cannot check for file existence when cross compiling], [../../lib/autoconf/general.m4:2491: AC_CHECK_FILE is expanded from...
+m4macros/udunits2.m4:19: AC_PATH_UDUNITS2 is expanded from...
+configure.in:127: the top level])
+m4trace:configure.in:127: -1- _m4_warn([cross], [cannot check for file existence when cross compiling], [../../lib/autoconf/general.m4:2491: AC_CHECK_FILE is expanded from...
+m4macros/udunits2.m4:19: AC_PATH_UDUNITS2 is expanded from...
+configure.in:127: the top level])
+m4trace:configure.in:127: -1- _m4_warn([cross], [cannot check for file existence when cross compiling], [../../lib/autoconf/general.m4:2491: AC_CHECK_FILE is expanded from...
+m4macros/udunits2.m4:19: AC_PATH_UDUNITS2 is expanded from...
+configure.in:127: the top level])
+m4trace:configure.in:127: -1- _m4_warn([cross], [cannot check for file existence when cross compiling], [../../lib/autoconf/general.m4:2491: AC_CHECK_FILE is expanded from...
+m4macros/udunits2.m4:19: AC_PATH_UDUNITS2 is expanded from...
+configure.in:127: the top level])
+m4trace:configure.in:127: -1- m4_pattern_allow([^HAVE_UDUNITS2$])
+m4trace:configure.in:127: -1- m4_pattern_allow([^HAVE_LIBEXPAT$])
+m4trace:configure.in:127: -1- m4_pattern_allow([^UDUNITS2_CPPFLAGS$])
+m4trace:configure.in:127: -1- m4_pattern_allow([^UDUNITS2_LDFLAGS$])
+m4trace:configure.in:127: -1- m4_pattern_allow([^UDUNITS2_LIBS$])
+m4trace:configure.in:160: -1- m4_pattern_allow([^DO_UDUNITS2_LINE$])
+m4trace:configure.in:161: -1- m4_pattern_allow([^DO_UDUNITS2_INCDIR$])
+m4trace:configure.in:162: -1- m4_pattern_allow([^DO_UDUNITS2_LIBDIR$])
+m4trace:configure.in:163: -1- m4_pattern_allow([^DO_UDUNITS2_LIBNAME$])
+m4trace:configure.in:166: -1- AC_PATH_PNG
+m4trace:configure.in:166: -1- _m4_warn([cross], [cannot check for file existence when cross compiling], [../../lib/autoconf/general.m4:2491: AC_CHECK_FILE is expanded from...
+m4macros/png.m4:18: AC_PATH_PNG is expanded from...
+configure.in:166: the top level])
+m4trace:configure.in:166: -1- _m4_warn([cross], [cannot check for file existence when cross compiling], [../../lib/autoconf/general.m4:2491: AC_CHECK_FILE is expanded from...
+m4macros/png.m4:18: AC_PATH_PNG is expanded from...
+configure.in:166: the top level])
+m4trace:configure.in:166: -1- _m4_warn([cross], [cannot check for file existence when cross compiling], [../../lib/autoconf/general.m4:2491: AC_CHECK_FILE is expanded from...
+m4macros/png.m4:18: AC_PATH_PNG is expanded from...
+configure.in:166: the top level])
+m4trace:configure.in:166: -1- _m4_warn([cross], [cannot check for file existence when cross compiling], [../../lib/autoconf/general.m4:2491: AC_CHECK_FILE is expanded from...
+m4macros/png.m4:18: AC_PATH_PNG is expanded from...
+configure.in:166: the top level])
+m4trace:configure.in:166: -1- _m4_warn([cross], [cannot check for file existence when cross compiling], [../../lib/autoconf/general.m4:2491: AC_CHECK_FILE is expanded from...
+m4macros/png.m4:18: AC_PATH_PNG is expanded from...
+configure.in:166: the top level])
+m4trace:configure.in:166: -1- _m4_warn([cross], [cannot check for file existence when cross compiling], [../../lib/autoconf/general.m4:2491: AC_CHECK_FILE is expanded from...
+m4macros/png.m4:18: AC_PATH_PNG is expanded from...
+configure.in:166: the top level])
+m4trace:configure.in:166: -1- m4_pattern_allow([^HAVE_PNG$])
+m4trace:configure.in:166: -1- m4_pattern_allow([^PNG_CPPFLAGS$])
+m4trace:configure.in:166: -1- m4_pattern_allow([^PNG_LDFLAGS$])
+m4trace:configure.in:166: -1- m4_pattern_allow([^PNG_LIBS$])
+m4trace:configure.in:194: -1- m4_pattern_allow([^DO_PNG_LINE$])
+m4trace:configure.in:195: -1- m4_pattern_allow([^DO_PNG_INCDIR$])
+m4trace:configure.in:196: -1- m4_pattern_allow([^DO_PNG_LIBDIR$])
+m4trace:configure.in:197: -1- m4_pattern_allow([^DO_PNG_LIBNAME$])
+m4trace:configure.in:200: -1- m4_pattern_allow([^INSTALL_PROGRAM$])
+m4trace:configure.in:200: -1- m4_pattern_allow([^INSTALL_SCRIPT$])
+m4trace:configure.in:200: -1- m4_pattern_allow([^INSTALL_DATA$])
+m4trace:configure.in:202: -1- m4_pattern_allow([^PREFIX$])
+m4trace:configure.in:203: -1- m4_pattern_allow([^CFLAGS$])
+m4trace:configure.in:204: -1- m4_pattern_allow([^CPPFLAGS$])
+m4trace:configure.in:205: -1- m4_pattern_allow([^LDFLAGS$])
+m4trace:configure.in:206: -1- m4_pattern_allow([^X_INCLUDES$])
+m4trace:configure.in:280: -1- m4_pattern_allow([^RPATH_FLAGS$])
+m4trace:configure.in:285: -1- m4_pattern_allow([^LIB@&t@OBJS$])
+m4trace:configure.in:285: -1- m4_pattern_allow([^LTLIBOBJS$])
+m4trace:configure.in:285: -1- _AC_AM_CONFIG_HEADER_HOOK([$ac_file])
+m4trace:configure.in:285: -1- _AM_OUTPUT_DEPENDENCY_COMMANDS

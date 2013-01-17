@@ -1,0 +1,142 @@
+How to install ncview 
+---------------------
+
+You MUST install the netcdf version 4 libraries (version 4.1-beta2 or later) before 
+trying to install ncview.  NOTE that ncview version 2.0 and above REQUIRE a full 
+netcdf-4/HDF-5 install.  (I.e., the netcdf version 4 library must have been 
+compiled with the --enable-netcdf-4 flag).  Netcdf version 4.1-beta2 is available at:
+
+ftp://ftp.unidata.ucar.edu/pub/netcdf/netcdf-4.1-beta2.tar.gz
+
+Although this is a beta version of the netcdf library, I've had good luck with it.
+Version 4.0.1 of the netcdf library will *not* work.
+
+NOTE: if you want support for udunits-style dates (which is optional), then install 
+the udunits-2 library before trying to install ncview.  This will let you see your 
+time axis values in a human-readable date format.  Support for udunits version 1 
+has been dropped.  You can download udunits-2 from:
+
+http://www.unidata.ucar.edu/downloads/udunits/index.jsp
+
+
+
+Short version of installation instructions, presuming everything goes well:
+	1) ./configure
+	2) make
+	3) make install 
+
+
+Medium version of installation instructions, presuming a few directories
+are in unusual locations:
+	1) ./configure \
+		--with-netcdf_incdir=dir_with_netcdf.h \
+		--with-netcdf_libname=name_of_netcdf_library \
+		--with-netcdf_libdir=dir_with_netcdf_library \
+		--with-udunits_incdir=dir_with_udunits.h \
+		--with-udunits_libdir=dir_with_libunits.a 
+	You don't need to specify all of these, only the ones that
+	can't be found by the configure script.  The script will tell
+	you if it can't find the netCDF files, and stop.  If it can't
+	find the udunits files, then it will continue, but not build
+	that part of ncview.
+	2) make
+	3) make install (easiest if you are super-user; otherwise, see below)
+		
+
+Long version of installation instructions
+
+1) Decide whether you want support for the "udunits" package.
+   If you do, make it separately (source is included in the
+   ncview package, strictly as a convenience.  Udunits is
+   available from: http://www.unidata.ucar.edu/packages/udunits/index.html).
+   Make the package and set environmental variable UDUNITS_PATH
+   to the location of the "udunits.dat" file.  
+
+2) Run the configure script.  By default, everything will be installed
+   under the /usr/local directory hierarchy.  If you are NOT intending
+   to install as super-user -- for example, if you don't have super-user
+   permissions on the machine -- then you should run configure with 
+   the option "--prefix=$HOME".  This will install things under your home
+   directory instead of the /usr/local directory.
+
+   There are other useful options to configure.  In particular, you might
+   have the netCDF include and library files in non-standard places.  In
+   that case, you need to tell configure where they are, by using the
+   appropriate arguments to configure, as follows:
+
+./configure \
+	--with-netcdf_incdir=dir_with_netcdf.h \
+	--with-netcdf_libname=name_of_netcdf_library \
+	--with-netcdf_libdir=dir_with_netcdf_library \
+	--with-udunits_incdir=dir_with_udunits.h \
+
+   For example, if your netcdf include file (which is named netcdf.h) is
+   in directory /opt/src/netcdf/include and the library file is in
+   /opt/src/netcdf/lib then you would type:
+
+   ./configure  --with-netcdf_incdir=/opt/src/netcdf/include --with-netcdf_libdir=/opt/src/netcdf/lib
+
+3) Once configure runs without errors, type "make".
+
+4) Type "make install".
+
+5) Ncview puts copies of the colormap files (files with extension
+   ".ncmap") in a system-wide directory, whose location defaults to
+   "/usr/local/lib/ncview".  If you are installing in your home
+   directory, these files will end up in "$HOME/lib/ncview".
+
+A test netCDF data file is available from unidata.ucar.edu in file
+/pub/netcdf/sample_data/aP.nc.
+
+A manual entry is included in the distribution, ncview.1.  The
+'install' entry in the Makefile runs ncview.1.sed through sed to
+convert the generic references to the location of the ncview lib
+directory to the specific place applicable to your installation.
+
+To have the udunits part work, the udunits file must be in the proper
+place.  Look in the udunits documentation to find out more about this
+issue. In general, you can set the environmental variable UDUNITS_PATH 
+to the location of the file "udunits.dat", which generally lives in
+directory "etc" of the udunits source tree: "udunits-1.11.7/etc".
+
+To Install by Hand
+------------------
+You can also install by hand if you want.  A quick overview:
+        a) make a /usr/local/lib/ncview directory:
+                mkdir /usr/local/lib/ncview
+        b) put all the colormaps (*.ncmap) and overlays (nc_overlay.*)
+           into that directory:
+                cp *.ncmap nc_overlay.* /usr/local/lib/ncview/.
+        c) copy the Ncview app-defaults file over to the system app
+           defaults directory (usually /usr/lib/X11/app-defaults):
+                cp Ncview /usr/lib/X11/app-defaults/.
+        d) copy ncview itself to /usr/local/bin:
+                cp ncview /usr/local/bin/ncview
+
+Copying, etc.
+-------------
+Ncview is freely redistributable, but is not public domain.
+It is copyright (C) 1993 through 2008 David W. Pierce.
+This program  is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License version 3 as 
+published by the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License, version 3, for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+The SciPlot widget is Copyright (c) 1995 Robert W. McMullen
+<rwmcm@orion.ae.utexas.edu>.  You can visit the SciPlot web page at
+http://www.ae.utexas.edu/~rwmcm/SciPlot.html.
+
+------------------------
+David W. Pierce
+6259 Caminito Carrena
+San Diego, CA  92122
+dpierce@ucsd.edu
+

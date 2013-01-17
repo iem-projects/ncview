@@ -1,0 +1,66 @@
+Ncview 1.93d  June 13, 2008 -- (C) David W. Pierce
+--------------------------------------------------
+
+Overview: What Ncview *is*.
+---------------------------
+This is the source for "ncview", a X Windows (Release 4 or higher) 
+visual browser for netCDF data format files.  Ncview displays a 
+2-dimensional, color representation of data in a netCDF file.  You 
+can animate the data in time (making simple movies), flip or enlarge 
+the picture, scan through various axes, change colormaps, etc.  You
+can also plot the data in X-Y plots and then print those, courtesy 
+of the SciPlot widget from Robert W. McMullen <rwmcm@orion.ae.utexas.edu>.
+
+What Ncview *isn't*.
+--------------------
+Ncview is *not* an analysis package.  There are several excellent 
+commercial packages available for that.  Rather, its purpose in life 
+is to view movies or simple plots of data stored in netCDF format
+files quickly, easily, and simply.  To view your data in a 'movie',
+all you do is fire Ncview up and press a couple buttons--that's it!  To
+make a plot, just click on the movie!  By contrast, analysis programs 
+often require a lot of overhead massaging the data before you can do 
+much.
+
+I've tested this on DEC 5000s and DEC Alphas, IBM RS/6000s, SGI
+workstations, and Linux machines.  It should also work with Suns now.
+If you port it to a new platform, please mail me any changes which 
+are required!  
+
+Getting ncview
+--------------
+The latest version of Ncview is available for anonymous ftp from
+cirrus.ucsd.edu:/pub/ncview.
+If you can't compile it, and need binaries, e-mail me and I'll 
+see if I can find binaries for your platform.
+
+Building ncview
+---------------
+see file "INSTALL"
+
+Copying, etc.
+-------------
+Ncview is freely redistributable, but is not public domain.
+It is copyright (C) 1993 through 2003 David W. Pierce.
+This program  is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License version 1 as 
+published by the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License, version 1, for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+The SciPlot widget is Copyright (c) 1995 Robert W. McMullen
+<rwmcm@orion.ae.utexas.edu>.  You can visit the SciPlot web page at
+http://www.ae.utexas.edu/~rwmcm/SciPlot.html.
+
+------------------------
+David W. Pierce
+6259 Caminito Carrena
+San Diego, CA  92122
+dpierce@ucsd.edu

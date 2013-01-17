@@ -1,0 +1,129 @@
+!
+! app-defaults file for Ncview 
+!
+! David W. Pierce   20 January 2006	dpierce@ucsd.edu
+!
+! If this does not match the version of ncview being run, an error
+! is generated.  This helps to make sure that the proper app-defaults
+! file is being used.
+Ncview*version:		1.93
+!
+! If this is 1, then ncview will code the dimensionality of the displayable
+! variables (in a list) by setting their color to the colors below.  If this
+! is 0, then no color coding of the dimensionality of the variable is done.
+Ncview*varColors:	1
+!
+Ncview*foreground1d:	grey
+Ncview*foreground2d:	lightblue3
+Ncview*foreground3d:	pink2
+Ncview*foreground4d:	yellow
+Ncview*foreground5d:	white
+!
+! If this is 1, then ncview will attempt to automatically put on coastlines
+! if it "thinks" the data is geographical atmospheric data.
+Ncview*autoOverlay:	1
+!
+! Width of the information-giving labels.  If you like wordy titles and
+! long names, you might want to set this to be larger; conversely, if
+! your descriptions are terse, you might want to set this smaller.
+Ncview*labelWidth:	555
+!
+! Default size, in PIXELS, to set a newly opening window to.
+Ncview*blowupDefaultSize:  300
+!
+! Width of the dimension name buttons.  If you use a 
+! large font, or long dimension names, you might want 
+! to increase this.
+Ncview*dimLabelWidth:	95
+!
+! Width of the variable name buttons.  If you use a 
+! large font, or long variable names, you might want 
+! to increase this.
+Ncview*varLabelWidth:	114
+!
+! Number of variables per row of the variable selection box.
+! Might want to reduce if you increased 'dimLabelWidth'
+Ncview*nVarsPerRow:	4
+!
+! Some people like "exit"
+Ncview*quit*label:	Quit
+!
+! It may be desirable to set these, depending on what colors
+! you typically have loaded:
+Ncview*foreground:	azure
+Ncview*background:	SteelBlue
+Ncview*PlotXY_canvas*background: LightSteelBlue
+!
+Ncview*font:			-*-helvetica-*-r-*-*-14-*-*-*-*-*-*-*
+!
+Ncview*ccontour*borderWidth: 	0
+!
+Ncview*label2.justify:	Left
+Ncview*label3.justify:	Left
+Ncview*label4.justify:	Left
+Ncview*label5.justify:	Left
+!
+Ncview*label2*borderWidth:	0
+Ncview*label3*borderWidth:	0
+Ncview*label4*borderWidth:	0
+Ncview*label5*borderWidth:	0
+!
+!*optionbox.borderWidth:	0
+!
+!*varselectform.borderWidth:	0
+Ncview*varlist_label*borderWidth:	0
+!
+Ncview*label_row.borderWidth:		0
+Ncview*label_name.borderWidth:	0
+Ncview*label_dimension.borderWidth:	0
+Ncview*label_min.borderWidth:		0
+Ncview*label_cur.borderWidth:		0
+Ncview*label_max.borderWidth:		0
+Ncview*label_units.borderWidth:	0
+!
+Ncview*ydimselectbox.borderWidth:	0
+Ncview*ydimlist_label.borderWidth:	0
+!
+Ncview*xdimselectbox.borderWidth:	0
+Ncview*xdimlist_label.borderWidth:	0
+!
+! Modifications to standard button presses.  My convention
+! is that mouse button3 indicates a reversal of standard procedure,
+! whereas holding down the control key while pressing a mouse button 
+! indicates an accelerated version of the standard procedure.  You 
+! might prefer something different.  '_mod2' versions are
+! the accelerated version of the standard routines, '_mod3'
+! are backwards versions of the standards, and '_mod4' are
+! accelerated backwards versions of the standard routines.  
+! '_mod1' are the standard versions themselves.  
+!
+! backup actions
+Ncview*cmap.translations:   #augment <Btn3Down>,<Btn3Up>: cmap_mod3()
+Ncview*Range.translations:  #augment <Btn3Down>,<Btn3Up>: range_mod3()
+!
+! accelerated actions
+Ncview*reverse.translations:     #override Ctrl<Btn1Down>,<Btn1Up>: reverse_mod2()
+Ncview*back.translations:        #override Ctrl<Btn1Down>,<Btn1Up>: back_mod2()
+Ncview*forward.translations:     #override Ctrl<Btn1Down>,<Btn1Up>: forward_mod2()
+Ncview*fastforward.translations: #override Ctrl<Btn1Down>,<Btn1Up>: fastforward_mod2()
+!
+! Accelerated, backwards, and accelerated backwards actions
+Ncview*blowup.translations: #override Ctrl<Btn3Down>,<Btn3Up>: blowup_mod4()\n\
+				<Btn3Down>,<Btn3Up>: blowup_mod3()\n\
+				Ctrl<Btn1Down>,<Btn1Up>: blowup_mod2()
+! Add our own redraw routine
+!*ccontour.translations:	   #override <Expose>: redraw_ccontour()
+!
+Ncview*scrollspeed.translations: #override <Btn1Down>:StartScroll(Continuous) MoveThumb() NotifyThumb() \n\
+					<Btn1Motion>:MoveThumb() NotifyThumb()
+!
+! Various actions you can do in the color contour window.
+Ncview*ccontour.translations:	   #augment\n\
+				Ctrl<Btn1Up>: do_set_min_from_curdata()\n\
+				<Key>q: do_quit_app()\n\
+				<Btn1Up>: do_plot_xy()\n\
+				Ctrl<Btn1Motion>: do_set_min_from_curdata()\n\
+				Ctrl<Btn3Up>: do_set_max_from_curdata()\n\
+				Ctrl<Btn3Motion>: do_set_max_from_curdata()\n\
+				<Btn2Up>: do_set_dataedit_place()\n\
+				<Btn2Motion>: do_set_dataedit_place()

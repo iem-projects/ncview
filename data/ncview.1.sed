@@ -1,0 +1,366 @@
+.TH NCVIEW 1 local
+.SH NAME
+ncview \- graphically display netCDF files under X windows
+.SH SYNOPSIS
+.B ncview
+[-beep] [-copying] [-frames] [-warranty] [-private] [-ncolors XX] [-extrainfo] [-mtitle "title"] [-minmax fast | med | slow | all] datafiles ...
+.PP
+.SH DESCRIPTION
+.I Ncview
+displays 2-D slices of a netCDF data file, using the X Window System
+graphical user interface (Release 4 or higher).
+You can examine different floating point variables in the file, and animate
+the floating point data along the ``record dimension'' (usually time) 
+to see how it evolves.
+You can also display 1-D (line plot) views of the data simply by
+clicking the mouse on the point of interest.
+.PP
+When you first invoke 
+.I ncview,
+a command panel comes up which has a number of buttons
+for manipulating the current view into the data file,
+and presenting various information about the current view.
+From the top, going down, the information
+fields are: the 'title' of the data file;
+the 'long_name' of the currently selected variable;
+the frame number (i.e., place along the scan axis)
+currently displayed; the minimum and maximum values of the
+variable; and
+the value of the data point under the cursor (only
+active when the pointer is over the color contour image).
+.PP
+Next comes a row of buttons similar to a tape recorder,
+used for changing the view into the netCDF file
+along the scan dimension.
+In Version 1.XX of 
+.I ncview,
+the scan dimension is constrained to be the ``record dimension''
+(in netCDF parlance).
+From the left, the buttons are: the quit button; a button
+to take you directly to the first frame, marked "->1";
+rewind, which loops the images going backwards; step backwards; pause;
+step forwards; and fast forward, which loops the images
+going forwards.
+.PP
+Below this is the row of option buttons, which from
+the left are: the colormap button, labeled with the name
+of the current colormap (see below); "Inv P", which inverts the physical
+representation of the data (flips it upside-down);
+"Inv C", which inverts the colors currently being
+used so that the colors indicating minimum and maximum 
+are switched; the magnification button, which 
+sets how much image expansion the image undergoes; and
+the transformation button, which determines what preprocessing
+the data undergoes before display.
+For this button, "Linear" means no preprocessing, "Low" means
+that the data is raised to the fourth power before conversion
+to a pixel, so that low values are emphasized; and "Hi" means that
+the fourth root of the data is taken before conversion, so
+that large values are emphasized.
+Next comes "Set Dim"; pressing this pops up a window which
+allows you to determine which variables are shown on the X
+and Y axes.
+Note that Version 1.XX of
+.I ncview
+will 
+.I not
+transpose your data!
+This means that, for example, you cannot simultaneously 
+display the X dimension along the Y axis while displaying 
+the Y dimension along the X axis---that would be an attempt
+to transpose the data.
+You can display the X dimension along the Y axis if some
+other variable which varies less rapidly in your particular
+data file (for example, depth) is on the X axis.
+Such a configuration is possible because it involves no
+transposition of data.
+In general you don't have to worry about this issue much,
+because if you attempt to pick axes which would be transposing
+the data, 
+.I ncview
+switches them (and tells you that it's doing so!) so you can
+get the axes you want.
+Note that there is never any ambiguity about which dimensions are being  
+displayed on what axes; that information is always shown
+in the main panel.
+Next is "range", which pops up dialog boxes to set the data
+min and maxes which will be contoured.
+Pressing with the RIGHTMOST mouse button on the "range" button
+resets the ranges to match the currently displayed slice;
+this is a VERY useful option, so remember it and make use
+of it frequently!
+The last button shows the method currently employed for
+expanding the data onto the screen; the default, "bi-lin", 
+performes a bi-linear interpolation.
+Also available is "repl", which simply replicates the pixels
+and is somewhat faster.
+.PP
+The next row of buttons shows what 
+variables can be displayed from the input files.
+Note that when 
+.I ncview
+first comes up, if there is more than one variable
+in the file, you must select a variable to display before 
+you will see anything.
+If there is only one variable in the file, the selection
+defaults to that one.
+.PP
+Below the variable selection buttons are the dimension
+information fields.
+All the dimensions for the displayed variable which can
+take on more than one value are shown here, one variable
+to a line.
+In each line, there are 6 fields of information; from 
+left to right, they are: "Dim", the Dimension identifier, which is
+`Scan' if the dimension is currently the scanned dimension
+(i.e., the dimension accessed via the tape-recorder style
+buttons), `X' if the dimension appears in the color contour display
+along the x axis, or `Y' if it appears in the color display 
+along the y axis.  This
+field will be blank if it isn't Scan, X, or Y.
+Next come "Name", the dimension's short name; "Min", the minimum
+value of the dimension; "Current", the current value of the dimension
+as displayed in the color contour panel; "Max", the maximum value
+of the dimension; and "Units", the dimension's units.
+Clicking on the "Current" field of a dimension allows you to
+change the current value of that dimension.
+Clicking with the left mouse button increases the current value
+of that dimension; clicking with the right button decreases it.
+.PP
+.SH POPUP X-Y GRAPH
+You can get a popup X-Y (line) graph of data at a
+point simply by clicking on the point of interest.
+You have several options at this point; with the bottons
+at the bottom of the window you can change the axis
+along which the data is graphed (if there are other
+axes available), use log scaling for the X and/or Y
+axis, and set the data range.  You can also dump
+out the data from the X-Y plot into an text file,
+for easy importation into other programs.
+.PP
+Up to five line plots can be on one graph.  The panel
+on which the next line plot will appear is called
+the "locked" panel.  If you don't want the next line
+plot to appear on the locked panel, then unlock it
+by pressing the "Locked" button.
+At the moment, panels are automatically unlocked when you choose
+a new variable.
+.PP
+.SH UDUNITS SUPPORT
+.I ncview 
+supports time axes that use the conventions 
+in the udunits package.  Typical units names in this
+scheme would be "days since 1990-01-01".  If 
+.I ncview
+encounters a time dimension that it understands in
+this way, then it displays the calendar date (as
+calculated by the udunits package, not ncview)
+rathar than the actual axis value.  For instance,
+it might display "3_Jun_1995" rather than "Day 2390".
+To have this functionality, the udunits package
+must be able to find the "udunits.dat" file.
+You must set the environmental variable UDUNITS_PATH to
+the location of this file for ncview to be able
+to find it.
+.PP
+.SH MODIFIERS
+Clicking on a button with the left mouse button 
+invokes the standard action described above; clicking
+with the right mouse button on the colormap select,
+transformation, magnification, or dimension "Current" buttons 
+DECREASES the selection
+instead of increasing it (i.e., cycles in the reverse direction).
+Holding down the control key "accelerates" actions; while
+clicking with the left mouse button will increase
+the rate at which the rewind, step backwards, 
+step forwards, and fast forward keys will step 
+through the data.
+When holding down the control key while clicking on the
+magnification button, the magnification DOUBLES or HALVES
+instead of incrementing or decrementing by one.
+.PP
+.I Ncview
+attempts to save the displayed images in main memory,
+with each frame being saved as it is calculated for the
+first time.
+This speeds up looping replays of the same data.
+If there is not enough memory to store all the required
+frames at the selected magnification, 
+.I ncview
+will inform you and automatically stop trying to do 
+so.
+Changing the magnification will again force 
+.I ncview
+to try and allocate a image buffer.
+.PP
+Since the scaled, interpolated pixel maps are stored, the following
+operations will flush the image buffer and require
+recalculating the images if they are performed:
+inverting the data; inverting the color map; changing
+the magnification; changing the data transformation (linear,
+lo, or hi); changing the dimension; changing the range;
+changing the pixel replication scheme.
+Changing colormaps does not require refilling the image
+buffer.
+.PP
+You can invoke
+.I ncview
+with multiple netCDF filenames on the command line, and
+it will try to present the data in a logical way; i.e.,
+if there are identically named variables in the data files,
+it will try to treat them as if they were all in one giant
+data file.
+If there are different variables in different files, it 
+will let you choose to display any of the available variables.
+This is generally a Good Thing, but if you have identically
+named variables in different files with different attributes,
+.I ncview
+will not know which attribute you want to use and most
+likely will crash.
+.PP
+.SH SETTING THE DATA RANGE
+.PP
+It is important to set the data range correctly; otherwise,
+the color contour might come out all red, or all blue, or
+otherwise not very interesting.
+There are a number of ways to set or manipulate the range:
+1) Click with the left mouse button on the "range" button.
+This pops up a dialog window letting you specify the minimum
+and maximum values directly.
+2) Click with the right mouse button on the "range" button.
+This scales the displayed data to the currently shown frame.
+3) Click with the left mouse button on a data point in the
+color-contour window; this will set the minimum scaling to
+the value of the data which you clicked on.
+4) Click with the right mouse button on a data point in the
+color-contour window; this will set the maximum scaling to
+the value of the data which you clicked on.
+.PP
+.SH OPTIONS
+.I -beep:
+rings the terminal's bell when stepping forward through
+frames in movie mode and the loop is restarted.
+.PP
+.I -extrainfo:
+Puts up extra information in the color-contour window.
+This is useful for photographing the computer screen to
+make slides or pictures of the data.
+.PP
+.I -frames:
+This will make ncview dump out the frames it displays
+in a series of PPM-format files.
+You can then make them into an mpeg movie if you so desire
+(using tools other than ncview).
+.PP
+.I -mtitle:
+Puts the following argument (enclosed in quotes) up
+as the title of the color-contour window.
+.PP
+.I -ncolors:
+Sets the number of colors which will be displayed. 
+Defaults to 200.
+Must currently be less than 256.
+.PP
+.I -private:
+Forces use of a private colormap.  
+This will cut down on the number of colormap entries
+used, but will turn the rest of the screen annoying
+colors.
+.PP
+.I -minmax:
+determines how the calculation of minimum and maximum values
+is done.  If
+.I fast,
+then only the first, middle, and last time entries of
+each variable are examined.
+If
+.I med,
+then every fifth time entry is scanned for extrema.
+If
+.I slow,
+then every tenth entry is used.
+If
+.I all,
+then every time entry is examined for extrema.
+Default is "fast".
+.PP
+.I -copying:
+prints out the terms under which 
+.I ncview
+may be copied, distributed, and modified.
+.I Ncview
+is covered under the provisions of the Gnu General 
+Public Liicense Version 1.
+.PP
+.I -warranty:
+.I Ncview
+comes with no warranty; this option prints out a
+fuller statement to this effect.
+.SH ENVIRONMENT
+.I Ncview
+looks in directory NCVIEW_LIB_DIR for system-wide
+colormap (.ncmap) files.
+It also examines the user's environmental variable NCVIEWBASE for
+the name of a directory which contains additional colormap
+files.
+If that is not defined, then colormaps are sought in
+the user's home directory, and in the directory which
+.i ncview
+was run from.
+
+Colormap files have 256 lines, each consisting of
+one r g b triplet, where r, g, and b are integers in
+the range of 0 to 255.
+There should be only whitespace separating the
+r, g, and b values on each line.
+Colormap files end with the extension ".ncmap".
+If
+.I Ncview
+does not find any colormaps, it will complain, and
+supply a simple default map.
+.PP
+It is necessary to install the applications default
+file, "Ncview", in your $XAPPLRESDIR directory for the 
+program to function properly.
+If the screen appears out of alignment, make
+sure that this installation has been performed.
+
+The application resources file recognizes the following
+resources, in addition to the standard ones:
+
+.TP
+.B labelWidth
+The width, in pixels, of the information labels at
+the top of the main window.
+If you generally use long titles and variable longnames,
+you might want to increase this.
+Default = 400.
+.TP
+.B buttonWidth
+The width, in pixels, of the "variable" and "dimension"
+buttons.
+If you use long names for these, you might want to 
+increase this value.
+Default = 50.
+.TP
+.B nVarsPerRow
+The number of variable buttons in a row before
+a new one is started. 
+Set to be aesthetically pleasing to you.
+Default = 5.
+.TP
+.B deltaStep
+The amount to step forward and backwards by when the
+control key is held down while pushing the button.
+If this value is less than 0, in indicates an
+absolute number of steps to take; if this value
+is greater than zero, it indicates the percent
+(in integer form, from 1 to 100) of the total
+file size to step.  
+Default = 10 (ten percent).
+
+.SH BUGS
+Occasional bugs surface, especially when mixing
+variables in different files.
+
+Please send all bug reports to pierce@cirrus.ucsd.edu

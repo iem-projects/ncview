@@ -1,0 +1,298 @@
+colormap_funcs.o colormap_funcs.o: interface/colormap_funcs.c \
+  interface/../ncview.includes.h /usr/include/stdio.h \
+  /usr/include/_types.h /usr/include/sys/_types.h \
+  /usr/include/sys/cdefs.h /usr/include/machine/_types.h \
+  /usr/include/i386/_types.h /usr/include/secure/_stdio.h \
+  /usr/include/secure/_common.h /usr/include/stdlib.h \
+  /usr/include/Availability.h /usr/include/AvailabilityInternal.h \
+  /usr/include/sys/wait.h /usr/include/sys/signal.h \
+  /usr/include/sys/appleapiopts.h /usr/include/machine/signal.h \
+  /usr/include/i386/signal.h /usr/include/i386/_structs.h \
+  /usr/include/sys/_structs.h /usr/include/machine/_structs.h \
+  /usr/include/mach/i386/_structs.h /usr/include/sys/resource.h \
+  /usr/include/machine/endian.h /usr/include/i386/endian.h \
+  /usr/include/sys/_endian.h /usr/include/libkern/_OSByteOrder.h \
+  /usr/include/libkern/i386/_OSByteOrder.h /usr/include/alloca.h \
+  /usr/include/machine/types.h /usr/include/i386/types.h \
+  /usr/include/i386/_types.h /usr/include/sys/types.h \
+  /usr/include/dirent.h /usr/include/sys/dirent.h /usr/include/sys/stat.h \
+  /usr/include/fcntl.h /usr/include/sys/fcntl.h \
+  /usr/lib/gcc/i686-apple-darwin10/4.2.1/include/limits.h \
+  /usr/lib/gcc/i686-apple-darwin10/4.2.1/include/syslimits.h \
+  /usr/include/limits.h /usr/include/machine/limits.h \
+  /usr/include/i386/limits.h /usr/include/i386/_limits.h \
+  /usr/include/sys/syslimits.h /usr/include/math.h \
+  /usr/include/architecture/i386/math.h /usr/include/time.h \
+  /usr/include/_structs.h /usr/include/unistd.h /usr/include/sys/unistd.h \
+  /usr/include/sys/select.h /usr/include/sys/_select.h \
+  /usr/include/ctype.h /usr/include/runetype.h \
+  /opt/local/include/X11/Intrinsic.h /opt/local/include/X11/Xlib.h \
+  /opt/local/include/X11/X.h /opt/local/include/X11/Xfuncproto.h \
+  /opt/local/include/X11/Xosdefs.h \
+  /usr/lib/gcc/i686-apple-darwin10/4.2.1/include/stddef.h \
+  /opt/local/include/X11/Xutil.h /opt/local/include/X11/keysym.h \
+  /opt/local/include/X11/keysymdef.h /opt/local/include/X11/Xresource.h \
+  /usr/include/string.h /usr/include/secure/_string.h \
+  /opt/local/include/X11/Core.h /opt/local/include/X11/Composite.h \
+  /opt/local/include/X11/Constraint.h /opt/local/include/X11/Object.h \
+  /opt/local/include/X11/RectObj.h /opt/local/include/X11/IntrinsicP.h \
+  /opt/local/include/X11/CoreP.h /opt/local/include/X11/CompositeP.h \
+  /opt/local/include/X11/ConstrainP.h /opt/local/include/X11/ObjectP.h \
+  /opt/local/include/X11/RectObjP.h /opt/local/include/X11/StringDefs.h \
+  /opt/local/include/X11/cursorfont.h /opt/local/include/X11/Shell.h \
+  /opt/local/include/X11/SM/SMlib.h /opt/local/include/X11/SM/SM.h \
+  /opt/local/include/X11/ICE/ICElib.h /opt/local/include/X11/ICE/ICE.h \
+  /opt/local/include/X11/Xaw/Form.h /opt/local/include/X11/Xaw/Box.h \
+  /opt/local/include/X11/Xmu/Converters.h \
+  /opt/local/include/X11/Xaw/Command.h /opt/local/include/X11/Xaw/Label.h \
+  /opt/local/include/X11/Xaw/Simple.h /opt/local/include/X11/Xaw/Toggle.h \
+  /opt/local/include/X11/Xaw/Dialog.h \
+  /opt/local/include/X11/Xaw/Scrollbar.h \
+  /opt/local/include/X11/Xaw/Viewport.h \
+  /opt/local/include/X11/Xaw/Reports.h /opt/local/include/X11/Xaw/List.h \
+  /opt/local/include/X11/Xaw/AsciiText.h \
+  /opt/local/include/X11/Xaw/Text.h /opt/local/include/X11/Xaw/TextSink.h \
+  /opt/local/include/X11/Xaw/TextSrc.h \
+  /opt/local/include/X11/Xaw/AsciiSrc.h \
+  /opt/local/include/X11/Xaw/AsciiSink.h \
+  /opt/local/include/X11/Xaw/MultiSrc.h \
+  /opt/local/include/X11/Xaw/MenuButton.h \
+  /opt/local/include/X11/Xaw/SimpleMenu.h \
+  /opt/local/include/X11/Xaw/SmeBSB.h /opt/local/include/X11/Xaw/Sme.h \
+  /opt/local/include/X11/Xaw/SmeLine.h interface/../SciPlot.h \
+  /opt/local/include/netcdf.h /usr/include/errno.h \
+  /usr/include/sys/errno.h interface/../../config.h \
+  interface/../stringlist.h interface/../ncview.defines.h \
+  interface/../ncview.protos.h
+
+interface/../ncview.includes.h:
+
+/usr/include/stdio.h:
+
+/usr/include/_types.h:
+
+/usr/include/sys/_types.h:
+
+/usr/include/sys/cdefs.h:
+
+/usr/include/machine/_types.h:
+
+/usr/include/i386/_types.h:
+
+/usr/include/secure/_stdio.h:
+
+/usr/include/secure/_common.h:
+
+/usr/include/stdlib.h:
+
+/usr/include/Availability.h:
+
+/usr/include/AvailabilityInternal.h:
+
+/usr/include/sys/wait.h:
+
+/usr/include/sys/signal.h:
+
+/usr/include/sys/appleapiopts.h:
+
+/usr/include/machine/signal.h:
+
+/usr/include/i386/signal.h:
+
+/usr/include/i386/_structs.h:
+
+/usr/include/sys/_structs.h:
+
+/usr/include/machine/_structs.h:
+
+/usr/include/mach/i386/_structs.h:
+
+/usr/include/sys/resource.h:
+
+/usr/include/machine/endian.h:
+
+/usr/include/i386/endian.h:
+
+/usr/include/sys/_endian.h:
+
+/usr/include/libkern/_OSByteOrder.h:
+
+/usr/include/libkern/i386/_OSByteOrder.h:
+
+/usr/include/alloca.h:
+
+/usr/include/machine/types.h:
+
+/usr/include/i386/types.h:
+
+/usr/include/i386/_types.h:
+
+/usr/include/sys/types.h:
+
+/usr/include/dirent.h:
+
+/usr/include/sys/dirent.h:
+
+/usr/include/sys/stat.h:
+
+/usr/include/fcntl.h:
+
+/usr/include/sys/fcntl.h:
+
+/usr/lib/gcc/i686-apple-darwin10/4.2.1/include/limits.h:
+
+/usr/lib/gcc/i686-apple-darwin10/4.2.1/include/syslimits.h:
+
+/usr/include/limits.h:
+
+/usr/include/machine/limits.h:
+
+/usr/include/i386/limits.h:
+
+/usr/include/i386/_limits.h:
+
+/usr/include/sys/syslimits.h:
+
+/usr/include/math.h:
+
+/usr/include/architecture/i386/math.h:
+
+/usr/include/time.h:
+
+/usr/include/_structs.h:
+
+/usr/include/unistd.h:
+
+/usr/include/sys/unistd.h:
+
+/usr/include/sys/select.h:
+
+/usr/include/sys/_select.h:
+
+/usr/include/ctype.h:
+
+/usr/include/runetype.h:
+
+/opt/local/include/X11/Intrinsic.h:
+
+/opt/local/include/X11/Xlib.h:
+
+/opt/local/include/X11/X.h:
+
+/opt/local/include/X11/Xfuncproto.h:
+
+/opt/local/include/X11/Xosdefs.h:
+
+/usr/lib/gcc/i686-apple-darwin10/4.2.1/include/stddef.h:
+
+/opt/local/include/X11/Xutil.h:
+
+/opt/local/include/X11/keysym.h:
+
+/opt/local/include/X11/keysymdef.h:
+
+/opt/local/include/X11/Xresource.h:
+
+/usr/include/string.h:
+
+/usr/include/secure/_string.h:
+
+/opt/local/include/X11/Core.h:
+
+/opt/local/include/X11/Composite.h:
+
+/opt/local/include/X11/Constraint.h:
+
+/opt/local/include/X11/Object.h:
+
+/opt/local/include/X11/RectObj.h:
+
+/opt/local/include/X11/IntrinsicP.h:
+
+/opt/local/include/X11/CoreP.h:
+
+/opt/local/include/X11/CompositeP.h:
+
+/opt/local/include/X11/ConstrainP.h:
+
+/opt/local/include/X11/ObjectP.h:
+
+/opt/local/include/X11/RectObjP.h:
+
+/opt/local/include/X11/StringDefs.h:
+
+/opt/local/include/X11/cursorfont.h:
+
+/opt/local/include/X11/Shell.h:
+
+/opt/local/include/X11/SM/SMlib.h:
+
+/opt/local/include/X11/SM/SM.h:
+
+/opt/local/include/X11/ICE/ICElib.h:
+
+/opt/local/include/X11/ICE/ICE.h:
+
+/opt/local/include/X11/Xaw/Form.h:
+
+/opt/local/include/X11/Xaw/Box.h:
+
+/opt/local/include/X11/Xmu/Converters.h:
+
+/opt/local/include/X11/Xaw/Command.h:
+
+/opt/local/include/X11/Xaw/Label.h:
+
+/opt/local/include/X11/Xaw/Simple.h:
+
+/opt/local/include/X11/Xaw/Toggle.h:
+
+/opt/local/include/X11/Xaw/Dialog.h:
+
+/opt/local/include/X11/Xaw/Scrollbar.h:
+
+/opt/local/include/X11/Xaw/Viewport.h:
+
+/opt/local/include/X11/Xaw/Reports.h:
+
+/opt/local/include/X11/Xaw/List.h:
+
+/opt/local/include/X11/Xaw/AsciiText.h:
+
+/opt/local/include/X11/Xaw/Text.h:
+
+/opt/local/include/X11/Xaw/TextSink.h:
+
+/opt/local/include/X11/Xaw/TextSrc.h:
+
+/opt/local/include/X11/Xaw/AsciiSrc.h:
+
+/opt/local/include/X11/Xaw/AsciiSink.h:
+
+/opt/local/include/X11/Xaw/MultiSrc.h:
+
+/opt/local/include/X11/Xaw/MenuButton.h:
+
+/opt/local/include/X11/Xaw/SimpleMenu.h:
+
+/opt/local/include/X11/Xaw/SmeBSB.h:
+
+/opt/local/include/X11/Xaw/Sme.h:
+
+/opt/local/include/X11/Xaw/SmeLine.h:
+
+interface/../SciPlot.h:
+
+/opt/local/include/netcdf.h:
+
+/usr/include/errno.h:
+
+/usr/include/sys/errno.h:
+
+interface/../../config.h:
+
+interface/../stringlist.h:
+
+interface/../ncview.defines.h:
+
+interface/../ncview.protos.h:

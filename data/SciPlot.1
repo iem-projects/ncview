@@ -1,0 +1,685 @@
+.TH "SciPlot Widget" 3X "23 Feb 1995" "Version 1.12"
+.SH NAME
+SciPlot \- a Widget to display scientific plots
+.SH OVERVIEW
+The SciPlot Widget is a widget capable of plotting cartesian or polar graphs,
+including logarithmic axes in cartesian plots.  The widget is subclassed
+directly from the Core widget class, which means that it does not depend upon
+any other widget set.  It may be freely used with Athena, Motif, or the Open
+Look/Xview widget sets.  (If the SciPlot widget is compiled with the flag
+"MOTIF" defined, the widget will be subclassed from XmPrimitive, allowing
+keyboard traversal of the widget.  If "MOTIF" is not defined, the widget will
+still operate with Motif, but will not respond to events.)
+.SH FEATURES
+Features provided in the widget include the following:
+.sp
+.TS
+center;
+l.
+Cartesian or Polar plots
+Automatic or manual axis scales
+Logarithmic scales for cartesian plot
+Degrees or radians for polar angles
+Axis labeling
+Legend drawing
+Multiple lines per plot
+Various symbols and line styles
+Color support
+User font selection
+PostScript (EPS) output
+.TE
+.sp
+.SH USAGE
+To use the SciPlot widget in an application, include the three source code
+files SciPlot.c, SciPlot.h, and SciPlotP.h with the rest of the source code
+for the application.  Include the object SciPlot.o in the Makefile rule that
+compiles the application.
+
+If it is important for the widget to respond to Motif keyboard traversal or
+any events while in a Motif program, define the keyword "MOTIF" for the C
+compiler.  In a Makefile, a commom place to put this definition is in a
+variable called "DEFINES".  The line in the Makefile would look like this:
+.sp
+.nf
+	DEFINES=-DMOTIF
+.fi
+.sp
+In source code that uses the SciPlot widget, include the following two header
+files before references to the plot widget:
+.sp
+.nf
+#include <X11/Intrinsic.h>
+#include "SciPlot.h"
+.fi
+.sp
+To create the SciPlot widget, use the following code as an example:
+.sp
+.nf
+plotWidget=XtVaCreateManagedWidget("plot2",sciplotWidgetClass,parent,
+		XtNheight, 250,
+		XtNwidth, 250,
+		XtNplotTitle, "Demo of Plot Widget",
+		XtNxLabel, "X Axis (units)",
+		XtNyLabel, "Y Axis (units)",
+		XtNchartType, XtPOLAR,
+		XtNdegrees, True,
+		NULL);
+.fi
+.sp
+This example creates a 250x250 polar plot widget as a child of parent,
+using degrees as the angle measurement unit.
+
+Data is plotted on the graph in groups called \fIlists\fP.  Each \fIlist\fP
+consists of a group of coordinates that will be connected together by a drawn
+line, and share the same point style, point color, line style, line color and
+legend label.  Data is added to the widget using convenience functions only. 
+There is no current provision to add data via the argument list.
+
+An example using one of the convenience functions is given below:
+.sp
+.nf
+double rlist[]={14.,18.,22.,26.,30.,34.,38.,42.};
+double tlist[]={30.,60.,90.,120.,150.,180.,270.,355.};
+int line1;
+.fi
+.sp
+
+.nf
+line1=SciPlotListCreateFromDouble(plotWidget,
+		8,rlist,tlist,"List 1");
+.fi
+.sp
+
+The variable line1 is the identifier of the \fIlist\fP that will be needed to
+modify the \fIlist\fP by the other convenience functions that operate on
+\fIlists\fP.
+
+This example adds a \fIlist\fP to be plotted in plotWidget.  If plotWidget was
+created using the call to XtVaCreateManagedWidget above, the line would be
+added to a polar plot, where the angles in tlist would be interpreted as
+degrees.
+
+There are other convenience functions to specify colors and styles of the
+points and lines drawn in the Plot widget, as well as functions to pick
+the colors used and others to update previously defined \fIlists\fP.  See the
+section "PUBLIC FUNCTIONS" below for descriptions of all of the convenience
+functions.
+.SH COLOR
+The SciPlot widget fully supports color on displays which also support color.
+By default, two colors are allocated at creation time:  black for the
+foreground, and white for the background.  For the SciPlot widget to use any
+other color, one of the color convenience functions must be used to allocate
+a color in the global colormap.
+
+Colors are indicated by an integer returned from the color allocation
+convenience functions.  The two default colors occupy the first two spaces
+in the color table, where the default background (white) is number 0, and the
+default foreground (black) is number 1.
+.SH FONTS
+Fonts used by the SciPlot widget are referenced using special notation.  This
+non-standard notation was used to be able to easily convert between PostScript
+and X11 notation, and as a result, only a subset of the fonts that are
+available in both X11 and PostScript are available.
+
+Fonts are referenced by using predefined keywords to indicate the typeface,
+style, and point size.  Each keyword is an integer value defined in SciPlot.h,
+and a complete font definition is created by logically or-ing keywords together.
+
+Supported fonts and styles are listed below:
+.sp
+.TS
+center;
+c c
+l l.
+Font Name	Description
+.sp
+XtFONT_TIMES	Times
+XtFONT_COURIER	Courier (monospaced font)
+XtFONT_HELVETICA	Helvetica
+XtFONT_LUCIDA	Lucida
+XtFONT_LUCIDASANS	Lucida Sans Serif
+XtFONT_NCSCHOOLBOOK	New Century Schoolbook
+.TE
+.sp
+.TS
+center;
+c c
+l l.
+Style Name	Description
+.sp
+XtFONT_BOLD	Bold
+XtFONT_ITALIC	Italic
+XtFONT_BOLD_ITALIC	Bold and Italic
+.TE
+.sp
+A font is specified by or-ing together these keywords, plus the size in points.
+Some examples follow:
+.sp
+.nf
+12 point Times, bold:
+	XtFONT_TIMES|XtFONT_BOLD|12
+	
+10 point Courier:
+	XtFONT_COURIER|10
+	
+16 point Lucida, bold and italic:
+	XtFONT_LUCIDA|XtFONT_BOLD_ITALIC|16
+.fi
+.sp
+Note that XtFONT_BOLD_ITALIC is simply shorthand for XtFONT_BOLD|XtFONT_ITALIC
+.SH POINT STYLES
+The SciPlot widget is capable of drawing markers at each data point.  There are
+19 predefined point marker definitions:
+.sp
+.TS
+center;
+c c
+l l.
+Style Name	Description
+.sp
+XtMARKER_NONE	no point marker drawn
+XtMARKER_CIRCLE	open circle
+XtMARKER_SQUARE	square
+XtMARKER_UTRIANGLE	triangle (pointing up)
+XtMARKER_DTRIANGLE	triangle (pointing down)
+XtMARKER_LTRIANGLE	triangle (pointing left)
+XtMARKER_RTRIANGLE	triangle (pointing right)
+XtMARKER_DIAMOND	diamond
+XtMARKER_HOURGLASS	hourglass shape
+XtMARKER_BOWTIE	bowtie shape
+XtMARKER_FCIRCLE	filled variants of the above...
+XtMARKER_FSQUARE	
+XtMARKER_FUTRIANGLE	
+XtMARKER_FDTRIANGLE	
+XtMARKER_FLTRIANGLE	
+XtMARKER_FRTRIANGLE	
+XtMARKER_FDIAMOND	
+XtMARKER_FHOURGLASS	
+XtMARKER_FBOWTIE	
+.TE
+.SH LINE STYLES
+For each \fIlist\fP in the SciPlot widget, one of the following styles may be used to
+draw the lines that connect each point in the \fIlist\fP:
+.sp
+.TS
+center;
+c c
+l l.
+Style Name	Description
+.sp
+XtLINE_NONE	no line (only points drawn)
+XtLINE_SOLID	solid line (the default)
+XtLINE_DOTTED	dotted line
+XtLINE_WIDEDOT	widely spaced dotted line
+.TE
+.SH POSTSCRIPT OUTPUT
+Encapsulated PostScript (EPS) files of the plot displayed in the SciPlot widget
+may be generated.  These files are suitable for printing or importing into
+documents that can handle the EPS format.  Color is ignored when creating the
+EPS files, however.
+.SH NEW RESOURCES
+Resources for the SciPlot widget are documented below, also showing the default
+values.
+.sp
+.TS
+center;
+c c c c
+l l l l.
+Name	Class	Type	Default
+.sp
+XtNaxisFont	XtCSciPlotFont	int	*1
+XtNchartType	XtCMargin	int	XtCARTESIAN
+XtNdegrees	XtCBoolean	Boolean	True
+XtNdrawMajor	XtCBoolean	Boolean	True
+XtNdrawMajorTics	XtCBoolean	Boolean	True
+XtNdrawMinor	XtCBoolean	Boolean		True
+XtNdrawMinorTics	XtCBoolean	Boolean	True
+XtNlabelFont	XtCSciPlotFont	int	*2
+XtNlegendLineSize	XtCMargin	int	16
+XtNlegendMargin	XtCMargin	int	3
+XtNmargin	XtCMargin	int	5
+XtNplotTitle	XtCString	String	"Plot"
+XtNshowLegend	XtCBoolean	Boolean	True
+XtNshowTitle	XtCBoolean	Boolean	True
+XtNshowXLabel	XtCBoolean	Boolean	True
+XtNshowYLabel	XtCBoolean	Boolean	True
+XtNtitleFont	XtCSciPlotFont	int	*3
+XtNtitleMargin	XtCMargin	int	8
+XtNxLabel	XtCString	String	"X Axis"
+XtNyLabel	XtCString	String	"Y Axis"
+XtNxLog	XtCBoolean	Boolean	False
+XtNyLog	XtCBoolean	Boolean	False
+XtNxOrigin	XtCBoolean	Boolean	False
+XtNyOrigin	XtCBoolean	Boolean	False
+.TE
+.sp
+.nf
+Notes:
+*1:	10 point Times
+*2:	18 point Times
+*3:	24 point Helvetica
+.fi
+.sp
+
+.IP XtNchartType
+Specifies a the type of chart to be drawn.  Currently, two types are
+available:  XtCARTESIAN = cartesian (X-Y) plot, XtPOLAR = polar plot.
+
+.IP XtNdegrees
+Sets the type of angular unit measurement:  True=degrees,
+False=radians.
+
+.IP XtNdrawMajor
+Controls the display of major gridlines.
+
+.IP XtNdrawMajorTics
+Controls the display of major tic marks on the axes.
+
+.IP XtNdrawMinor
+Controls the display of minor gridlines.
+
+.IP XtNdrawMinorTics
+Controls the display of minor tic marks on the axes.
+
+.IP XtNlabelFont
+Names the font for use on the axis labels, as well as the numbers
+that mark the scale for each axis.
+
+.IP XtNlegendLineSize
+The length (in pixels) of the small lines used to show the line style
+and color in the legend box.
+
+.IP XtNlegendMargin
+Sets the border margin (in pixels) between the legend box outline and
+anything contained in it. Also controls the spacing between the line
+sample and the text, and the vertical spacing between legend entries.
+
+.IP XtNmargin
+The spacing (in pixels) of the plot with the border of the widget.
+
+.IP XtNplotTitle
+This is the title of the plot that is drawn along the lower border of
+the widget.
+
+.IP XtNshowLegend
+If True, the legend block is drawn.
+
+.IP XtNshowTitle
+If True, the plot title is drawn.
+
+.IP XtNshowXLabel
+If True, the X axis (or the polar axis) label is drawn.
+
+.IP XtNshowYLabel
+If True, the Y axis label is drawn.
+
+.IP XtNtitleFont
+This font is used for the title of the plot.
+
+.IP XtNtitleMargin
+Spacing (in pixels) between the plot and the title.
+
+.RS
+.RE
+.nf
+XtNxLabel
+XtNyLabel
+(Cartesian only.)
+.fi
+.RS
+Sets the label for each axis.
+.RE
+.sp
+.nf
+XtNxLog
+XtNyLog
+(Cartesian only.)
+.fi
+.RS
+Controls the logarithmic scales of the X and Y axes.  If either of
+the resources is set to True, the corresponding axis will display in
+logarithmic units.  Note that log axes cannot display numbers less
+than or equal to zero, so only points with values on that axis greater
+than zero will be plotted.
+.RE
+.sp
+.nf
+XtNxOrigin
+XtNyOrigin
+(Cartesian only.)
+.fi
+.RS
+If True, these resources force the origin of their respective axes to
+be included in the plot.  If False, the displayed range only shows
+data between the minimum and maximum values along the named axis.
+.RE
+
+.SH PUBLIC FUNCTIONS
+The SciPlot widget uses an abstracted type "real" for its internal
+representation of floating point values.  By default, it is typedeffed to
+float.  Some of the convenience functions may depend on this real data type,
+but in general, separate functions will be provided depending upon a data
+type of float or double.
+
+Note that any changes to the widget are not reflected until a call to the
+public function SciPlotUpdate().  This includes any of the functions that
+add or remove \fIlists\fP, or change plot styles.  Any changes accomplished
+through XtVaSetValues, however, automatically updates the widget.
+
+.nf
+int
+SciPlotAllocNamedColor(w,name)
+Widget w;
+char *name;
+.fi
+.RS
+Attempts to allocate a color in the widget's colormap by using the
+standard X color name database.
+.sp	
+Returns a unique integer color ID greater than 1 if successful in
+allocating the named color.  If unsuccessful, it returns a 1, which
+is the default foreground color black.
+.RE
+
+.nf
+int
+SciPlotAllocRGBColor(w,r,g,b)
+Widget w;
+int r,g,b;
+.fi
+.RS
+Tries to allocate the color named by the r, g, and b parameters.  Note
+that these are integers ranging from 0 to 255, not 0 to 65535 as in
+X functions.
+.sp	
+As the previous function, it returns a number greater than 1 indicating
+that it found and allocated the new color.  If it returns 1, it could
+not allocate the color, and returned the value for the default
+foreground.
+.RE
+
+.nf
+void
+SciPlotExportData(w,fd)
+Widget w;
+FILE *fd;
+.fi
+.RS
+Writes to the file (must already by opened) referenced by fd a summary of
+the state of the SciPlot widget.  The columns of data are separated by tab
+characters, so with minor editing, the file generated should be importable by
+many commercial graphing programs.
+.RE
+
+.nf
+int
+SciPlotListCreateFromDouble(w,num,xlist,ylist,legend)
+Widget w;
+int num;
+double *xlist,*ylist;
+char *legend;
+.fi
+.RS
+Creates a \fIlist\fP from the data given in the arrays xlist and ylist.
+Both arrays must have num entries.  The parameter legend is the name
+of this \fIlist\fP, and is drawn in the legend box.  The initial colors (for
+both the points and the line) are set to black, the initial point
+style is set to a square, and the initial line style is solid.
+.sp	
+Returns an ID number for the newly created \fIlist\fP.  (Don't forget to
+call SciPlotUpdate().)
+.RE	
+
+.nf
+int
+SciPlotListCreateFromFloat(w,num,xlist,ylist,legend)
+Widget w;
+int num;
+float *xlist,*ylist;
+char *legend;
+.fi
+.RS
+Same as SciPlotListCreateFromDouble, except takes arrays of type float.
+.sp	
+Returns an ID number for the newly created \fIlist\fP.  (Don't forget to
+call SciPlotUpdate().)
+.RE
+
+.nf
+int
+SciPlotListDelete(w,list_id)
+Widget w;
+int list_id;
+.fi
+.RS
+Deletes the \fIlist\fP referenced by the ID number list_id.  (Don't forget to
+call SciPlotUpdate().)
+.RE
+
+.nf
+void
+SciPlotListSetStyle(w,list_id,pcolor,pstyle,lcolor,lstyle)
+Widget w;
+int list_id;
+int pstyle,pcolor,lstyle,lcolor;
+.fi
+.RS
+Sets the styles of the \fIlist\fP with an ID number of list_id.  See the
+sections COLOR, POINT STYLES and LINE_STYLES for descriptions of the
+available options.  (Don't forget to call SciPlotUpdate().)
+.RE
+
+.nf
+void
+SciPlotListUpdateFromDouble(w,list_id,num,xlist,ylist)
+Widget w;
+int list_id,num;
+double *xlist,*ylist;
+.fi
+.RS
+Replaces the data in the \fIlist\fP referenced by list_id with the new data
+contained in the arrays xlist and ylist.  Both xlist and ylist must
+be arrays of type double, and have num parameters.
+
+Note that the \fIlist\fP to be updated may have been originally created with
+any of the creation convenience functions, not only with the functions that
+require type double.  (Don't forget to call SciPlotUpdate().)
+.RE
+
+.nf
+void
+SciPlotListUpdateFromFloat(w,list_id,num,xlist,ylist)
+Widget w;
+int list_id,num;
+float *xlist,*ylist;
+.fi
+.RS
+Same as SciPlotListUpdateFromDouble, but takes arrays of type float.
+(Don't forget to call SciPlotUpdate().)
+.RE
+
+.nf
+void
+SciPlotSetBackgroundColor(w,color)
+Widget w;
+int color;
+.fi
+.RS
+Sets the background color of the widget to the color specified.  Note that
+the color ID number is obtained from one of the two functions
+SciPlotAllocNamedColor or SciPlotAllocRGBColor.
+.RE
+
+.nf
+void
+SciPlotSetForegroundColor(w,color)
+Widget w;
+int color;
+.fi
+.RS
+Sets the default foreground color to the color specified.  (See the note about
+color IDs above.)  This color is used as the default for the axis and legend
+box lines, as well as all of the text that appears in the widget.  PostScript
+output remains in monochrome, however.
+.RE
+
+.nf
+void
+SciPlotSetXAutoScale(w)
+Widget w;
+
+(Cartesian only.)
+.fi
+.RS
+Forces the widget to automatically scale the X axis based on the minimum
+and maximum values determined from all of the \fIlists\fP.
+(Don't forget to call SciPlotUpdate().)
+.RE
+
+.nf
+void
+SciPlotSetXUserScale(w,min,max)
+Widget w;
+float min,max;
+
+(Cartesian only, and not in logarithmic mode.)
+.fi
+.RS
+Forces the widget to display the X axis range based on the specified minimum
+and maximum values.
+(Don't forget to call SciPlotUpdate().)
+.RE
+
+.nf
+void
+SciPlotSetYAutoScale(w)
+Widget w;
+
+(Cartesian only.)
+.fi
+.RS
+Forces the widget to automatically scale the Y axis based on the minimum
+and maximum values determined from all of the \fIlists\fP.
+(Don't forget to call SciPlotUpdate().)
+.RE
+
+.nf
+void
+SciPlotSetYUserScale(w,min,max)
+Widget w;
+float min,max;
+
+(Cartesian only, and not in logarithmic mode.)
+.fi
+.RS
+Forces the widget to display the Y axis range based on the specified minimum
+and maximum values.
+(Don't forget to call SciPlotUpdate().)
+.RE
+
+.nf
+void
+SciPlotUpdate(w)
+Widget w;
+.fi
+.RS
+This function simply causes a recalculation of all internal parameters,
+and redraws the plot.  Call this function after adding, deleting,
+or changing \fIlists\fP to force the Widget to redraw itself.
+.RE
+
+.nf
+Boolean
+SciPlotPSCreate(w,filename)
+Widget w;
+char *filename;
+.fi
+.RS
+This function generates an Encapsulated PostScript file of the
+current contents of the plot widget, sized to fit on an entire page.  
+Colors are ignored, producing a PostScript file that is black and
+white only.
+.sp
+The filename parameter should include the pathname, if required.
+.sp
+Returns True indicating that the file was successfully created.  Any
+error in file creation or in the subsequent writes to the file will
+cause the subroutine to return False.
+.RE	
+
+.SH NOTES
+This code was developed on an IBM RS/6000 running AIX 3.2.4 and X11R5.  It
+was also tested on two other machines: a DEC Alpha/AXP running OSF/1 3.0
+with X11R5; and an SGI Indigo running IRIX 4.0.5 with X11R4.  I have had
+reports versions running on HP-UX systems, but have not personally
+tested this widget on machines other those listed.
+
+The vertical text drawing routine is based on the "fill stippled" idea that
+I first saw in the code xvertext-5.0 by Alan Richardson
+(mppa3@syma.sussex.ac.uk).
+
+The first X11 plotting widget that I saw was the libXG package
+written by Sundar Narasimhan (sundar@ai.mit.edu).  The libXG plotting widget
+Graph is based on a much more general widget called Display, which provides
+device independent 2D (and 3D) graphics.
+
+My attempts to change the Graph widget to do what I liked it to do led me to
+start from scratch and write this SciPlot widget.  I didn't need (or want) to
+include the sort of functionality present in the Display widget, so I wrote
+the SciPlot widget as a self-contained widget that uses printer points as
+the basis of the graphics.  Nevertheless, some of the techniques that I used
+are similar to those found in the Graph widget, so Sundar Narasimhan does
+deserve mention for the excellent libXG package.
+.SH BUGS
+The font selection algorithm isn't as robust as it should be when trying to
+choose a replacement for a font; specifically, when the user requests
+a font or a size that doesn't exist in the X server.
+.SH SOURCE LOCATION
+Source code for the SciPlot Widget is available in the archives of
+comp.sources.x, as well as via anonymous ftp on ftp.x.org in /contrib/widgets
+as SciPlot-?.?.tar.gz.
+.SH AUTHOR
+Robert W. McMullen <rwmcm@orion.ae.utexas.edu>
+
+This widget is supplied as freeware, in the hope that it will be useful for
+developers in the X community.  If you do use this widget, I do request that
+you include mention of the SciPlot widget in the documentation.  Also,
+remember to include a copy of the entire copyright and permission notice!
+Thanks.
+
+Patches, improvements, suggestions, and bug reports are welcome at the above
+e-mail address.  I will periodically post patches and improvements to
+ftp.x.org.
+.SH THANKS
+Thanks to the following people for providing fixes and suggestions:
+
+.nf
+Todd Smith <mtsmith@vision1.engr.utk.edu>
+Walter Underwood <wunder@msd.hpl.hp.com>
+Michael Katzmann <michael%vk2bea@secondsource.com>
+John Moyer <jrm@questconsult.com>
+Mike Kienenberger <FXMLK@aurora.alaska.edu>
+.fi
+.SH COPYRIGHT
+Copyright (c) 1995 Robert W. McMullen
+
+Portions of the SciPlot Widget source code, as marked, are:
+.nf
+  Copyright (c) 1993 Alan Richardson (mppa3@syma.sussex.ac.uk)
+.fi
+
+Permission to use, copy, modify, distribute, and sell this software and its
+documentation for any purpose is hereby granted without fee, provided that
+the above copyright notice appear in all copies and that both that copyright
+notice and this permission notice appear in supporting documentation.  All
+work developed as a consequence of the use of this program should duly
+acknowledge such use.  The author makes no representations about the
+suitability of this software for any purpose.  It is provided "as is" without
+express or implied warranty.
+
+THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING
+ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS.  IN NO EVENT SHALL THE
+AUTHOR BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY
+DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN
+AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.

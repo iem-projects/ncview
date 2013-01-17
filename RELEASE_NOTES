@@ -1,0 +1,40 @@
+2.0: 21 Jan 2010
+
+* ncview now REQUIRES netcdf version 4 with full HDF5 support.  I am not
+  going to maintain two code bases, one of which supports netcdf-4 and
+  one of which doesn't.  If you need a vesion of ncview that works even
+  without a full netcdf v4/HDF-5 install, use ncview version 1.93h.
+
+* If a udunits library is supplied, ncview now requires that it be the
+  udunits-2 library.  Support for the udunits-1 library has been dropped.
+  
+* Many thanks to Magnus Hagdorn for changes to the package that make it
+  more compatible with GNU standards!  All failures in that respect are
+  mine; Magnus' contributions were exemplary.
+
+1.93d: 13 June 2008
+
+* Thanks to Seth Olsen for contributing the code to sort the variables 
+  menus.
+
+1.75: 20 March 1999
+
+* This release adds much improved support for Linux boxes.  In general,
+  any depth of your server should work -- 8, 16, 24, or 32 bits.
+  Let me know if you have a problem with this.
+
+* Support has been added for converting the indicated time to a calendar
+  date IF the netCDF file's time axis has a "units" attribute that follows
+  the udunits conventions (see info on udunits at: 
+  http://www.unidata.ucar.edu/packages/udunits/index.html).  Time units 
+  in this syntax are typically something like "days since 1990-01-01".
+  If your data file follows these conventions, then the day number will
+  automatically be shown as a calendar date rather than the (not useful)
+  day number.  I.e., "10 Jan 1995" will be shown instead of "Day 3783" 
+  (or whatever).  This should work in the X-Y popup graph as well, but
+  not yet in the range-setting popups.
+
+* Compilation on Crays now works out of the box.
+
+* Fixed but that caused core dumps after selecting variables that
+  have all 0 as all their entries.

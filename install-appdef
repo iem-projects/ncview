@@ -1,0 +1,70 @@
+## 	Are we installing as super-user?  If yes, then put the app defaults
+##	file into the global directory, /usr/lib/X11/app-defaults.  If not,
+## 	then see if either XUSERFILESEARCHPATH or XAPPLRESDIR is defined,
+## 	and use one of them if it is.  If neither is defined, we must make
+##	a new .app-defaults directory (if it doesn't exist), and tell the user
+##	to set the XAPPLRESDIR environmental variable appropriately.
+##
+INSTALL=$1
+
+## Following seems to be needed for Mac OS X, which apparently gets
+## confused having two files with names differentated only by the
+## case (i.e., "ncview" and "Ncview").
+##
+mv ncview ncview.exe
+cp ./Ncview-appdefaults ./Ncview
+
+NCVEUID=`./geteuid`
+if test $NCVEUID -eq 0; then 
+	echo "--------------------------------------------------------"
+	echo "Installing app-defaults file in  /usr/lib/X11/app-defaults"
+	echo "--------------------------------------------------------"
+	$INSTALL Ncview /usr/lib/X11/app-defaults 
+else if test x$XAPPLRESDIR != x; then
+	if test ! -d $XAPPLRESDIR; then mkdir $XAPPLRESDIR; fi
+	echo "--------------------------------------------------------"
+	echo "Installing app-defaults file in $XAPPLRESDIR"
+	echo "--------------------------------------------------------"
+	$INSTALL Ncview $XAPPLRESDIR
+     elif test x$XUSERFILESEARCHPATH != x; then
+	if test ! -d $XUSERFILESEARCHPATH; then mkdir $XUSERFILESEARCHPATH; fi
+	echo "--------------------------------------------------------"
+	echo "Installing app-defaults file in $XUSERFILESEARCHPATH"
+	echo "--------------------------------------------------------"
+	$INSTALL Ncview $XUSERFILESEARCHPATH
+     else
+	echo "************************************************************"
+	echo "              **** I M P O R T A N T ****"
+	echo " "
+     	echo "To run properly, ncview needs to have a properly installed"
+	echo "applications default file.  You do not seem to be installing"
+	echo "as super-user, so I cannot write into the global application"
+	echo "defaults directory, /usr/lib/X11/app-defaults.  Therefore, I"
+	echo "must install the applications default file in a user-specific "
+	echo "location that you have write access to.  The traditional way to "
+	echo "do this is to define an environmental variable named XAPPLRESDIR "
+	echo "that holds the name of a directory to install user-specific application"
+	echo "default files into.  I am going to go ahead and put the ncview"
+	echo "applications default file, Ncview, into directory $HOME/.app-defaults"
+	echo " "
+	echo "        *** WHAT YOU NEED TO DO IS add the       ***"
+	echo "        *** following line to your .cshrc file:  ***"
+	echo " "
+	echo "setenv XAPPLRESDIR $HOME/.app-defaults"
+	echo " "
+	echo "NOTE that this will not take effect until you log out and then log"
+	echo "back in again!  (It also assumes you are using the csh; modify"
+	echo "as appropriate if you are using a different shell.)"
+	echo " "
+	echo "************************************************************"
+	XAPPLRESDIR=$HOME/.app-defaults
+	if test ! -d $XAPPLRESDIR; then mkdir $XAPPLRESDIR; fi
+	echo "--------------------------------------------------------"
+	echo "Installing app-defaults file in $XAPPLRESDIR"
+	echo "--------------------------------------------------------"
+	$INSTALL Ncview $XAPPLRESDIR
+     fi
+fi
+
+rm Ncview
+mv ncview.exe ncview

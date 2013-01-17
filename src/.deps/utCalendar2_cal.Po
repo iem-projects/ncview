@@ -1,0 +1,3 @@
+utCalendar2_cal.o utCalendar2_cal.o: utCalendar2_cal.c ../config.h
+
+../config.h:

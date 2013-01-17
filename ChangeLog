@@ -1,0 +1,37 @@
+2009-04-29 Magnus Hagdorn
+ * Makefile.am: distribute bootstrap script
+ * configure.in: fix some bugs, use new macro to find netCDF
+ * m4macros/hdf5.m4: fix some bugs
+ * m4macros/netcdf.m4: rewrite detection of netCDF library
+ * src/Makefile.am: use new Makefile variables to link to netCDF 
+   and its dependencies
+
+2009-04-29 Magnus Hagdorn
+ * m4macros/hdf5.m4: rewrite detection of hdf5 library
+
+2009-04-27 Magnus Hagdorn
+ * configure.in: rewrite check for udunits library
+ * m4macros/udunits.m4: replaced now
+ * src/Makefile.am: modify various variables to use udunits library
+ * src/file.c: renamed CPP macro defining whether to use udunits
+ * src/ncview.defines.h: ditto
+ * src/util.c: ditto
+
+2009-04-27 Magnus Hagdorn
+ * configure.in: rewrite check for ppm library
+ * m4macros/ppm.m4: replaced now
+ * src/Makefile.am: modify various variables to use ppm library
+ * src/interface/x_interface.c: renamed CPP macro defining whether to use ppm
+
+2009-04-27 Magnus Hagdorn
+ * configure.in: define some CPP macros
+ * src/ncview.defines.h: do not define PROGRAM ID and versions here, use
+   config.h instead
+ * src/ncview.c: use CPP macros from config.h
+ * src/util.c: ditto
+ * src/view.c: ditto
+ * src/interface/x_interface.c: ditto
+
+2009-04-27 Magnus Hagdorn
+ * configure.in: merge in origin configure.in
+ * src/Makefile.am: distribute additional header files

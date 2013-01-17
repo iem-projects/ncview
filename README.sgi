@@ -1,0 +1,7 @@
+Note:  At the moment this only compiles under the 32 bit ("-32")
+compiler.  I hope to fix this in the future.  For now, you need
+to have a 32 bit version of the netcdf library to link to if you
+want to build from scratch.  Otherwise, you can contact me about
+getting a pre-made binary version for IRIX 6.2.
+
+dpierce@ucsd.edu
