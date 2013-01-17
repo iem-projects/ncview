@@ -6086,7 +6086,7 @@ fi
 #----------------------------------------------------------------------------------
 if test x$ac_compiler_gnu = xyes; then
 	RPATH_FLAGS=""
-	for word in $UDUNITS2_LDFLAGS $NETCDF_LDFLAGS; do
+	for word in $UDUNITS2_LDFLAGS $NETCDF_LDFLAGS $LIBLO_LDFLAGS; do
 		if test `expr $word : -L/` -eq 3; then
 			RPDIR=`expr substr $word 3 999`;
 			RPATH_FLAGS="$RPATH_FLAGS -Wl,-rpath,$RPDIR"
