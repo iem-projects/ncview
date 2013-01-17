@@ -51,6 +51,9 @@
 #include "colormaps_hotres.h"
 #include "colormaps_ssec.h"
 
+// test liblo
+#include "lo/lo.h"
+
 /* Program defaults in a easy-to-find place */
 #define DEFAULT_INVERT_PHYSICAL	FALSE
 #define DEFAULT_INVERT_COLORS	FALSE
@@ -82,6 +85,10 @@ main( int argc, char **argv )
 {
 	Stringlist *input_files, *state_to_save;
 	int	   err, found_state_file;
+	
+	// liblo test
+	lo_address t_addr = lo_address_new(NULL, "57120");
+	lo_send(t_addr, "/sonify", NULL);
 
 	/* Initialize misc constants */
 	initialize_misc();

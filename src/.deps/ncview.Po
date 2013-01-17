@@ -67,7 +67,17 @@ ncview.o ncview.o: ncview.c ncview.includes.h /usr/include/stdio.h \
   colormaps_jet.h colormaps_wheel.h colormaps_3gauss.h colormaps_3saw.h \
   colormaps_bw.h colormaps_default.h colormaps_detail.h \
   colormaps_extrema.h colormaps_helix.h colormaps_helix2.h \
-  colormaps_hotres.h colormaps_ssec.h
+  colormaps_hotres.h colormaps_ssec.h /usr/local/include/lo/lo.h \
+  /usr/local/include/lo/lo_endian.h \
+  /usr/lib/gcc/i686-apple-darwin10/4.2.1/include/stdint.h \
+  /usr/include/netinet/in.h /usr/include/sys/socket.h \
+  /usr/include/machine/_param.h /usr/include/i386/_param.h \
+  /usr/include/netinet6/in6.h /usr/local/include/lo/lo_types.h \
+  /usr/include/netdb.h /usr/include/pthread.h /usr/include/pthread_impl.h \
+  /usr/include/sched.h /usr/local/include/lo/lo_osc_types.h \
+  /usr/local/include/lo/lo_errors.h /usr/local/include/lo/lo_lowlevel.h \
+  /usr/lib/gcc/i686-apple-darwin10/4.2.1/include/stdarg.h \
+  /usr/local/include/lo/lo_macros.h
 
 ncview.includes.h:
 
@@ -340,3 +350,39 @@ colormaps_helix2.h:
 colormaps_hotres.h:
 
 colormaps_ssec.h:
+
+/usr/local/include/lo/lo.h:
+
+/usr/local/include/lo/lo_endian.h:
+
+/usr/lib/gcc/i686-apple-darwin10/4.2.1/include/stdint.h:
+
+/usr/include/netinet/in.h:
+
+/usr/include/sys/socket.h:
+
+/usr/include/machine/_param.h:
+
+/usr/include/i386/_param.h:
+
+/usr/include/netinet6/in6.h:
+
+/usr/local/include/lo/lo_types.h:
+
+/usr/include/netdb.h:
+
+/usr/include/pthread.h:
+
+/usr/include/pthread_impl.h:
+
+/usr/include/sched.h:
+
+/usr/local/include/lo/lo_osc_types.h:
+
+/usr/local/include/lo/lo_errors.h:
+
+/usr/local/include/lo/lo_lowlevel.h:
+
+/usr/lib/gcc/i686-apple-darwin10/4.2.1/include/stdarg.h:
+
+/usr/local/include/lo/lo_macros.h:
