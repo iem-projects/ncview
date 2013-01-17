@@ -26,9 +26,20 @@ Grap the source from http://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-4.2
     $ make
     $ sudo make install
 
+### Preparatory step: installing liblo
+
+    http://downloads.sourceforge.net/liblo/liblo-0.26.tar.gz
+    
+    $ ./configure
+    $ make
+    $ sudo make install
+
 ### Building NCView
 
+    $ export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig/
     $ ./configure CC=/usr/bin/gcc-4.2 --x-libraries=/usr/X11/lib --x-includes=/usr/X11/include
+
+The first line is necessary for `pkg-config` to pick up liblo.
 
 This will configure a build without support for udunits and png. The executable will be `/usr/local/bin/ncview`. To build a local binary, add `` --prefix=`pwd` ``.
 
@@ -36,3 +47,7 @@ This will configure a build without support for udunits and png. The executable 
     $ sudo make install
 
 (`sudo` is not needed with the local prefix)
+
+If one needs to run `autoreconf`, the following is necessary first:
+
+    $ sudo cp -v m4macros/*.m4 /opt/local/share/aclocal/
