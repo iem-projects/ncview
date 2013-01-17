@@ -30,5 +30,9 @@ Grap the source from http://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-4.2
 
     $ ./configure CC=/usr/bin/gcc-4.2 --x-libraries=/usr/X11/lib --x-includes=/usr/X11/include
 
-This will build without support for udunits and png. The executable will be `/usr/local/bin/ncview`.
+This will configure a build without support for udunits and png. The executable will be `/usr/local/bin/ncview`. To build a local binary, add `` --prefix=`pwd` ``.
 
+    $ make
+    $ sudo make install
+
+(`sudo` is not needed with the local prefix)

@@ -175,6 +175,7 @@ static Widget
                         pause_button_widget,
                         forward_button_widget,
                         fastforward_button_widget,
+			sysson_button_widget,
 			edit_button_widget,
 			info_button_widget,
 			scrollspeed_label_widget,
@@ -413,6 +414,7 @@ void 	pause_mod1	(Widget w, XtPointer client_data, XtPointer call_data );
 void 	forward_mod1	(Widget w, XtPointer client_data, XtPointer call_data );
 void 	forward_mod2 	(Widget w, XButtonEvent *e, String *p, Cardinal *n );
 void 	ff_mod1		(Widget w, XtPointer client_data, XtPointer call_data );
+void 	sysson_mod1	(Widget w, XtPointer client_data, XtPointer call_data );
 void 	edit_mod1	(Widget w, XtPointer client_data, XtPointer call_data );
 void 	info_mod1	(Widget w, XtPointer client_data, XtPointer call_data );
 void 	fastforward_mod2 (Widget w, XButtonEvent *e, String *p, Cardinal *n );
@@ -864,7 +866,7 @@ void x_init_widgets_labels( Widget parent )
 		parent,
 		XtNwidth, app_data.label_width,
 		XtNfromVert, label2_widget,
-		XtNlabel, "*** SELECT A VARIABLE TO START ***",
+		XtNlabel, "With modifications by H.H.Rutz, 2013 IEM Graz",
 		NULL);
 
 	/* Displayed range */
@@ -872,7 +874,7 @@ void x_init_widgets_labels( Widget parent )
 		"label4",
 		labelWidgetClass,
 		parent,
-		XtNlabel, "",
+		XtNlabel, "*** SELECT A VARIABLE TO START ***",
 		XtNfromVert, label3_widget,
 		XtNwidth, app_data.label_width,
 		NULL);
@@ -917,7 +919,7 @@ void x_init_widgets_buttonbox( Widget parent )
 		commandWidgetClass,
 		buttonbox_widget,
 		XtNheight, 24,
-		XtNwidth, app_data.button_width,
+		XtNwidth, 44, // app_data.button_width,
 		NULL);
 
 	/*  ->1  */
@@ -928,7 +930,7 @@ void x_init_widgets_buttonbox( Widget parent )
 		XtNheight, 24,
 		XtNsensitive, False,
 		XtNlabel, "->1",
-		XtNwidth, app_data.button_width,
+		XtNwidth, 32, // app_data.button_width,
 		NULL);
 
 	/*   <<   */
@@ -992,6 +994,16 @@ void x_init_widgets_buttonbox( Widget parent )
 		XtParseTranslationTable( 
 			"#override Ctrl<Btn1Down>,<Btn1Up>: fastforward_mod2()" ));
 
+	/*   ~  */
+	sysson_button_widget = XtVaCreateManagedWidget(
+		"~",
+		toggleWidgetClass,
+		buttonbox_widget,
+		XtNheight, 24,
+		XtNwidth, 28,
+//		XtNsensitive, False,  // = enabled or not
+		NULL);
+	
 	/*   Edit   */
 	edit_button_widget = XtVaCreateManagedWidget(
 		"Edit",
@@ -2106,6 +2118,7 @@ static void add_callbacks()
         XtAddCallback( pause_button_widget,        XtNcallback, pause_mod1,        NULL );
         XtAddCallback( forward_button_widget,      XtNcallback, forward_mod1,      NULL );
         XtAddCallback( fastforward_button_widget,  XtNcallback, ff_mod1,           NULL );
+		XtAddCallback( sysson_button_widget,         XtNcallback, sysson_mod1,         NULL );
         XtAddCallback( edit_button_widget,         XtNcallback, edit_mod1,         NULL );
         XtAddCallback( info_button_widget,         XtNcallback, info_mod1,         NULL );
         XtAddCallback( invert_button_widget,       XtNcallback, invert_mod1,       NULL );
@@ -2339,6 +2352,13 @@ void forward_mod2( Widget w, XButtonEvent *event, String *params, Cardinal *num_
 {
 	in_button_pressed( BUTTON_FORWARD, MOD_2 );
 }
+
+/*************************************************************************************************/
+void sysson_mod1( Widget widget, XtPointer client_data, XtPointer call_data)
+{
+	in_button_pressed( BUTTON_SYSSON, MOD_1 );
+}
+
 
 /*************************************************************************************************/
 void edit_mod1( Widget widget, XtPointer client_data, XtPointer call_data)
@@ -2646,6 +2666,10 @@ void x_set_sensitive( int button_id, int state )
 			XtVaSetValues( transform_widget, XtNsensitive, state, NULL );
 			break;
 
+		case BUTTON_SYSSON:	
+			XtVaSetValues( transform_widget, XtNsensitive, state, NULL );
+			break;
+			
 		case BUTTON_EDIT:
 			XtVaSetValues( edit_button_widget, XtNsensitive, state, NULL );
 			break;

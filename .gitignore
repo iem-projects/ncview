@@ -6,3 +6,4 @@ Makefile
 src/Makefile
 src/geteuid
 src/ncview
+src/*.o

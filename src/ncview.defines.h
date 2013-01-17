@@ -31,7 +31,7 @@
 #include <udunits2.h>
 #endif
 
-#define PROGRAM_ID		"Ncview 2.1.2 David W. Pierce  24 Oct 2012"
+#define PROGRAM_ID		"Ncview 2.1.2 David W. Pierce  24 Oct 2012 +SysSon"
 #define PROGRAM_VERSION_STRING	"2.1.2"
 #define APP_RES_VERSION 	1.93
 
@@ -65,6 +65,7 @@
 #define BUTTON_INFO			20
 #define BUTTON_PRINT			21
 #define BUTTON_OPTIONS			22
+#define	BUTTON_SYSSON			23
 
 /***************************************************************************
  * These are the overlays we know about

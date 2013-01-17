@@ -305,6 +305,10 @@ in_button_pressed( int button_id, int modifier )
 			do_blowup_type( modifier );
 			break;
 
+		case BUTTON_SYSSON:	
+			fprintf( stderr, "! SysSon !\n");
+			break;
+
 		case BUTTON_EDIT:
 			do_data_edit( modifier );
 			break;

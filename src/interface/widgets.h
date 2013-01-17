@@ -50,6 +50,7 @@ static Widget
                         pause_button_widget,
                         forward_button_widget,
                         fastforward_button_widget,
+			sysson_button_widget,
 			edit_button_widget,
 			info_button_widget,
 			scrollspeed_label_widget,
