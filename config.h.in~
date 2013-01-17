@@ -27,6 +27,9 @@
 /* Define if you have version 4 of the NETCDF library */
 #undef HAVE_NETCDF4
 
+/* Define if you have PNG library */
+#undef HAVE_PNG
+
 /* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H
 
