@@ -1,0 +1,2 @@
+#!/bin/sh
+./bin/ncview /Users/hhrutz/Desktop/IEM/SysSon/netcdf/data/RO-MultiSatelliteClimatologies-SEremoved_plevData_months_012002-122010.nc

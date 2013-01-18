@@ -177,6 +177,8 @@ AC_CHECK_LIB(LIBLO,lo_address_new,[],[haveAthena=no])
 echo "liblo OSC library: $LIBLO_LIBS"
 AC_SUBST(LIBLO_CFLAGS)  # si?
 AC_SUBST(LIBLO_LIBS)
+LIBS+=$LIBSsave
+CFLAGS+=$CFLAGSsave
 
 # Handle png
 AC_PATH_PNG

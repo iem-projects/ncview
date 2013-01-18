@@ -1,0 +1,2 @@
+#!/bin/sh
+./configure CC=/usr/bin/gcc-4.2 --x-libraries=/usr/X11/lib --x-includes=/usr/X11/include --prefix=`pwd`
