@@ -9,3 +9,4 @@ src/ncview
 src/*.o
 autom4te.cache/output.*
 autom4te.cache/traces.*
+.deps

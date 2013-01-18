@@ -1,5 +1,11 @@
 SUBDIRS = src 
 
-bin_PROGRAMS = ncview
+# bin_PROGRAMS = ncview
 
-ncview_LDADD = $(LIBLO_LIBS)
+# ncview_CPPFLAGS = $(LIBIO_CFLAGS)
+# ncview_LDADD    = $(LIBLO_LIBS)
+# ncview_LDADD += @LIBLO_LIBS@
+
+# ncview_CPPFLAGS += $(LIBLO_CFLAGS)
+# ncview_LDADD    += $(LIBLO_LIBS)
+
