@@ -497,6 +497,9 @@ typedef struct {
 		invert_colors,
 		t_conv,
 		debug,
+	// ---- BEGIN SYSSON ----
+		sysson_debug,
+	// ---- END SYSSON ----
 		show_sel,
 		no_autoflip,
 		no_char_dims,

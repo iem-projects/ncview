@@ -86,10 +86,6 @@ main( int argc, char **argv )
 	Stringlist *input_files, *state_to_save;
 	int	   err, found_state_file;
 	
-	// liblo test
-	lo_address t_addr = lo_address_new(NULL, "57120");
-	lo_send(t_addr, "/sonify", NULL);
-
 	/* Initialize misc constants */
 	initialize_misc();
 
@@ -152,10 +148,30 @@ main( int argc, char **argv )
 		stringlist_delete_entire_list( state_to_save );
 		}
 
+	// ---- BEGIN SYSSON ----
+	initialize_sonfication( input_files );
+	// ---- END SYSSON ----
+		
 	process_user_input();
 
 	return(0);
 }
+
+// ---- BEGIN SYSSON ----
+void initialize_sonfication( Stringlist *input_files ) {
+	char *input_file;
+	
+	// OSC connection
+	lo_address t_addr = lo_address_new_with_proto(LO_UDP, NULL, "21327");
+
+	while( input_files != NULL ) {
+		input_file  = input_files->string;
+		if( options.sysson_debug ) printf( "[sysson] /open %s\n", input_file );
+		lo_send(t_addr, "/open", "s", input_file);
+		input_files = input_files->next;
+	}
+}
+// ---- END SYSSON ----
 
 /***********************************************************************************************/
 	Stringlist *
@@ -220,6 +236,11 @@ parse_options( int argc, char *argv[] )
 
 			else if( strncmp( argv[i], "-deb", 4 ) == 0 )
 				options.debug = TRUE;
+			
+			// ---- BEGIN SYSSON ----
+			else if( strncmp( argv[i], "-sysson", 7 ) == 0 )
+				options.sysson_debug = TRUE;
+			// ---- END SYSSON ----
 
 			else if( strncmp( argv[i], "-beep", 5 ) == 0 )
 				options.beep_on_restart = TRUE;
@@ -361,6 +382,9 @@ initialize_misc()
 	options.n_extra_colors 	 = 10;
 	options.private_colormap = DEFAULT_PRIVATE_CMAP;
 	options.debug		 = FALSE;
+	// ---- BEGIN SYSSON ----
+	options.sysson_debug	 = FALSE;
+	// ---- END SYSSON ----
 	options.show_sel	 = FALSE;
 	options.want_extra_info  = FALSE;
 	options.beep_on_restart  = FALSE;

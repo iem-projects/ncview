@@ -40,6 +40,10 @@ void	print_no_warranty	    ( void );
 void	print_copying	    	    ( void );
 void	useage			    ( void );
 
+// ---- BEGIN SYSSON ----
+void initialize_sonfication( Stringlist *input_files );
+// ---- END SYSSON ----
+
 /******************************************************************************
  * in file.c 
  */
