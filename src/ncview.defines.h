@@ -602,3 +602,9 @@ typedef struct {
 	int		magic;		/* is CMAPLIST_MAGIC if valid, CMAPLIST_BAD_MAGIC if freed */
 } Cmaplist;
 
+// ---- BEGIN SYSSON ----
+typedef struct {
+	lo_server source;
+	lo_address target;
+} OSC;
+// ---- END SYSSON ----

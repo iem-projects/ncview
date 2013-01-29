@@ -71,3 +71,6 @@
 
 #include "stringlist.h"
 
+// ---- BEGIN SYSSON ----
+#include "lo/lo.h"
+// ---- END SYSSON ----

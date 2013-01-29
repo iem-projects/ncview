@@ -51,9 +51,6 @@
 #include "colormaps_hotres.h"
 #include "colormaps_ssec.h"
 
-// test liblo
-#include "lo/lo.h"
-
 /* Program defaults in a easy-to-find place */
 #define DEFAULT_INVERT_PHYSICAL	FALSE
 #define DEFAULT_INVERT_COLORS	FALSE
@@ -74,6 +71,9 @@ NCVar	  *variables;
 ncv_pixel *pixel_transform;
 FrameStore framestore;
 Stringlist *read_in_state;
+// ---- BEGIN SYSSON ----
+OSC osc;
+// ---- END SYSSON ----
 
 static void init_cmaps_from_data();
 static void init_cmap_from_data( char *colormap_name, int *data );
@@ -131,6 +131,10 @@ main( int argc, char **argv )
 	if( options.debug ) printf( "Initializing overlays...\n" );
 	overlay_init();
 
+	// ---- BEGIN SYSSON ----
+	initialize_sonfication( input_files );
+	// ---- END SYSSON ----
+
 	/* If there is only one variable, make it the active one */
 	if( n_vars_in_list( variables ) == 1 ) {
 		/* set_scan_variable     ( variables       ); */
@@ -147,10 +151,6 @@ main( int argc, char **argv )
 			}
 		stringlist_delete_entire_list( state_to_save );
 		}
-
-	// ---- BEGIN SYSSON ----
-	initialize_sonfication( input_files );
-	// ---- END SYSSON ----
 		
 	process_user_input();
 
@@ -162,12 +162,13 @@ void initialize_sonfication( Stringlist *input_files ) {
 	char *input_file;
 	
 	// OSC connection
-	lo_address t_addr = lo_address_new_with_proto(LO_UDP, NULL, "21327");
+	osc.source = lo_server_new_with_proto(NULL, LO_UDP, NULL);  // no error handler at the moment...
+	osc.target = lo_address_new_with_proto(LO_UDP, NULL, "21327");
 
 	while( input_files != NULL ) {
 		input_file  = input_files->string;
 		if( options.sysson_debug ) printf( "[sysson] /open %s\n", input_file );
-		lo_send(t_addr, "/open", "s", input_file);
+		lo_send_from(osc.target, osc.source, LO_TT_IMMEDIATE, "/open", "s", input_file);
 		input_files = input_files->next;
 	}
 }

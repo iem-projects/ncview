@@ -42,6 +42,10 @@ extern	Options options;
 extern  NCVar *variables;
 extern  FrameStore framestore;
 
+// ---- BEGIN SYSSON ----
+extern OSC osc;
+// ---- END SYSSON ----
+
 View  *view = NULL;
 
 /* See comments in routine "view_draw" */
@@ -122,6 +126,10 @@ set_scan_variable( NCVar *var )
 
 	set_buttons( BUTTONS_ALL_ON );
 	unlock_plot();
+	
+	// ---- BEGIN SYSSON ----
+	lo_send_from(osc.target, osc.source, LO_TT_IMMEDIATE, "/var", "s", var->name);
+	// ---- END SYSSON ----
 
 	if( (view == NULL) || (view->x_axis_id == -1) || (view->y_axis_id == -1)) {
 		/* A brand new variable to display!  Exciting! */

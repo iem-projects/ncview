@@ -7,6 +7,6 @@ src/Makefile
 src/geteuid
 src/ncview
 src/*.o
-autom4te.cache/output.*
-autom4te.cache/traces.*
+autom4te.cache/
 .deps
+src/.deps
